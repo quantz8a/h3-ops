@@ -1,0 +1,28 @@
+{
+  "schema_version": "context_doc.v1",
+  "id": "jiangye_sc002_beat2_leafcut",
+  "title": "剑气削叶",
+  "brief": "竖屏武戏：剑气削落枯叶，埋箭手仍在林影。",
+  "locks": {
+    "character": ["宁缺", "桑桑影"],
+    "wardrobe": ["黑衣劲装", "灰布斗篷"],
+    "weapon": ["铁剑", "长弓"],
+    "palette": ["冷灰绿", "雾白"],
+    "camera": ["竖屏 9:16", "中近景起幅"]
+  },
+  "beats": [
+    {"id": "b1", "action": "枯叶横飞", "t0": 0.0, "t1": 1.2},
+    {"id": "b2", "action": "剑气一线削叶", "t0": 1.2, "t1": 3.5},
+    {"id": "b3", "action": "埋箭手林影未动", "t0": 3.5, "t1": 5.2}
+  ],
+  "negatives": ["现代枪械", "logo", "字幕烧录", "多头畸变"],
+  "canvas": {"w": 480, "h": 832},
+  "duration": 5.2,
+  "fps": 24,
+  "style_anchor": "chinese manhua cinematic, cold forest mist",
+  "seed": null,
+  "emit_profile": "h3c_dense",
+  "hd_intent": "upscale_1080",
+  "unsafe": false,
+  "revise_log": []
+}

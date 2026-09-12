@@ -1,0 +1,11 @@
+# unsafe_hq — large canvas; jetsam risk
+
+id: unsafe_hq
+width: 576
+height: 1024
+frames: 124
+steps: 20
+ssd_streaming: true
+requires_gate: true
+requires_i_know: true
+notes: "Stop mlx-serve first; free-pages must be healthy"

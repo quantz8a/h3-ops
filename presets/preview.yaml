@@ -1,0 +1,12 @@
+# preview — ≥5s vertical Base
+
+id: preview
+width: 480
+height: 832
+frames: 124
+steps: 8
+ssd_streaming: true
+layers: null
+reuse: null
+requires_gate: true
+notes: "Default review preset; ~5 min wall on M3 Ultra 96GB"

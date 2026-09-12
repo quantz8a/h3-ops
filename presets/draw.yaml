@@ -1,0 +1,10 @@
+# draw — vertical card pulls
+
+id: draw
+width: 480
+height: 832
+frames: 56
+steps: 6
+ssd_streaming: true
+requires_gate: false
+notes: "Short vertical cards; steps 4–8 OK"

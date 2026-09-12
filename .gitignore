@@ -1,0 +1,54 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+dist/
+build/
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+
+# Caches / locks
+.cache/
+*.lock
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# IDE / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*~
+
+# Media & run outputs (keep examples intentional)
+*.mp4
+*.mov
+*.mkv
+*.webm
+*.png
+*.jpg
+*.jpeg
+*.wav
+*.log
+out/
+outputs/
+renders/
+logs/
+tmp/
+
+# Model weights (never commit)
+*.safetensors
+*.gguf
+*.bin
+*.ckpt
+*.pt
+*.pth
+FL2VA/

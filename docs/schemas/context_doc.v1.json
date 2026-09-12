@@ -1,0 +1,151 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/local/h3-ops/schemas/context_doc.v1.json",
+  "title": "ContextDoc",
+  "description": "Hub artifact for h3-ops cir → ops → hd. Semantic rules beyond this schema live in DESIGN.md §4.3.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "title",
+    "brief",
+    "locks",
+    "beats",
+    "negatives",
+    "canvas",
+    "duration",
+    "style_anchor",
+    "emit_profile",
+    "hd_intent",
+    "revise_log"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "context_doc.v1"
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_\\-]*$"
+    },
+    "title": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "brief": { "type": "string", "minLength": 1, "maxLength": 4000 },
+    "locks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["character", "camera"],
+      "properties": {
+        "character": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "minItems": 1,
+          "maxItems": 16
+        },
+        "wardrobe": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "maxItems": 16,
+          "default": []
+        },
+        "weapon": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "maxItems": 16,
+          "default": []
+        },
+        "palette": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "maxItems": 16,
+          "default": []
+        },
+        "camera": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "minItems": 1,
+          "maxItems": 16
+        }
+      }
+    },
+    "beats": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "action"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1, "maxLength": 64 },
+          "action": { "type": "string", "minLength": 1, "maxLength": 512 },
+          "t0": { "type": "number", "minimum": 0 },
+          "t1": { "type": "number", "minimum": 0 }
+        }
+      }
+    },
+    "negatives": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "maxItems": 64
+    },
+    "canvas": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["w", "h"],
+      "properties": {
+        "w": { "type": "integer", "minimum": 256, "maximum": 2048, "multipleOf": 16 },
+        "h": { "type": "integer", "minimum": 256, "maximum": 2048, "multipleOf": 16 }
+      }
+    },
+    "duration": { "type": "number", "minimum": 1.0, "maximum": 60.0 },
+    "fps": {
+      "type": "integer",
+      "enum": [24, 25, 30],
+      "default": 24,
+      "description": "Used when deriving --frames from duration: frames = round(duration * fps), then clamp to preset."
+    },
+    "style_anchor": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "seed": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "maximum": 2147483647
+    },
+    "emit_profile": {
+      "type": "string",
+      "enum": ["h3c_plain", "h3c_dense"]
+    },
+    "hd_intent": {
+      "type": "string",
+      "enum": ["native", "upscale_1080", "upscale_2k", "cloud_2k"]
+    },
+    "unsafe": {
+      "type": "boolean",
+      "default": false,
+      "description": "If true, allow canvas outside safe allowlist (still requires ops gate --i-know)."
+    },
+    "revise_log": {
+      "type": "array",
+      "maxItems": 128,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["ts", "notes"],
+        "properties": {
+          "ts": {
+            "type": "string",
+            "minLength": 1,
+            "description": "ISO-8601 timestamp preferred"
+          },
+          "notes": { "type": "string", "minLength": 1, "maxLength": 2000 },
+          "backend": {
+            "type": "string",
+            "enum": ["human", "template", "local_llm", "cloud_cir"]
+          }
+        }
+      }
+    }
+  }
+}
