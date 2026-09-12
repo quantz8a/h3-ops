@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "h3-ops"
+version = "0.1.0"
+description = "Companion ops for antirez/h3.c"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+
+[project.scripts]
+h3ctl = "h3_ops.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

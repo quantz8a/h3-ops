@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# h3ctl — thin launcher for h3-ops
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+export PYTHONPATH="${ROOT}/src${PYTHONPATH:+:$PYTHONPATH}"
+exec python3 -m h3_ops "$@"

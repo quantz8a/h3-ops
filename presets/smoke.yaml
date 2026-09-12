@@ -1,0 +1,10 @@
+# smoke — path / shader / model check
+
+id: smoke
+width: 512
+height: 512
+frames: 22
+steps: 4
+ssd_streaming: true
+requires_gate: false
+notes: "Cheapest green-path check; ~1–2 min on M3 Ultra 96GB"

@@ -1,0 +1,10 @@
+# deliver — hero / review quality
+
+id: deliver
+width: 480
+height: 832
+frames: 124
+steps: 24
+ssd_streaming: true
+requires_gate: true
+notes: "steps 20–30; doctor must be green; ~7–14 min"
