@@ -10,7 +10,8 @@ Companion for [antirez/h3.c](https://github.com/antirez/h3.c): **ContextDoc → 
 
 **Truth artifact:** `ContextDoc` JSON ([schema](docs/schemas/context_doc.v1.json)). MP4 is a projection of doc + seed + preset.
 
-**Status:** Phase 0–4 MVP — ops + cir + hd. Phase 5 = cloud adapters. See [DESIGN.md](DESIGN.md).
+**Status:** Phase 0–4 MVP — ops + cir + hd. Phase 5 = cloud adapters. See [DESIGN.md](DESIGN.md).  
+**Site:** [quantz8a.github.io/h3-ops](https://quantz8a.github.io/h3-ops/)
 
 ## Requirements
 

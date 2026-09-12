@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>h3-ops — local companion for MiniMax-H3</title>
+    <meta
+      name="description"
+      content="ContextDoc → Base (h3.c) → honest HD. Offline stand-ins for Context-IR and delivery around antirez/h3.c."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Literata:opsz,wght@7..72,500;7..72,700&family=Sora:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="atmosphere" aria-hidden="true"></div>
+    <header class="top">
+      <a class="brand" href="./">h3-ops</a>
+      <nav>
+        <a href="https://github.com/quantz8a/h3-ops">GitHub</a>
+        <a href="https://github.com/quantz8a/h3-ops/blob/main/DESIGN.md">DESIGN</a>
+        <a href="https://github.com/quantz8a/h3-ops/pull/1">PR #1</a>
+      </nav>
+    </header>
+
+    <main class="hero">
+      <p class="kicker">antirez/h3.c companion</p>
+      <h1 class="logo">h3-ops</h1>
+      <p class="lede">
+        ContextDoc → Base generate → honest HD.<br />
+        不 fork Metal 引擎，补齐本地 CIR / 守门跑批 / 升清交付。
+      </p>
+      <div class="cta">
+        <a class="btn primary" href="https://github.com/quantz8a/h3-ops#readme"
+          >Get started</a
+        >
+        <a class="btn ghost" href="#flow">See the flow</a>
+      </div>
+    </main>
+
+    <section id="flow" class="flow">
+      <h2>一条命令链</h2>
+      <p class="support">Apple Silicon 本机：校验环境 → 结构化提示 → 出片 → 诚实升清。</p>
+      <ol class="steps">
+        <li>
+          <span class="mod">ops</span>
+          <code>h3ctl doctor</code>
+          <span>锁 GPU、查 shaders / FL2VA / 竞品进程</span>
+        </li>
+        <li>
+          <span class="mod">cir</span>
+          <code>h3ctl cir compile · validate · revise</code>
+          <span>ContextDoc 为真相；MP4 只是投影</span>
+        </li>
+        <li>
+          <span class="mod">ops</span>
+          <code>h3ctl run --preset smoke|preview</code>
+          <span>始终 chdir 到 h3.c，默认 --ssd-streaming</span>
+        </li>
+        <li>
+          <span class="mod">hd</span>
+          <code>h3ctl hd deliver --target upscale_1080</code>
+          <span>sidecar 标明 upscale，不假装 Regenerate-2K</span>
+        </li>
+      </ol>
+    </section>
+
+    <section class="triad">
+      <h2>官方三角 · 本地替身</h2>
+      <div class="grid">
+        <article>
+          <h3>Context-IR</h3>
+          <p>API only → <strong>cir</strong></p>
+        </article>
+        <article>
+          <h3>H3-Base</h3>
+          <p>开源权重 → <strong>ops</strong> + h3.c</p>
+        </article>
+        <article>
+          <h3>Regenerate-2K</h3>
+          <p>API only → <strong>hd</strong> ladder</p>
+        </article>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <p>MIT · companion to <a href="https://github.com/antirez/h3.c">antirez/h3.c</a></p>
+      <p class="mono">quantz8a.github.io/h3-ops</p>
+    </footer>
+    <script src="./main.js"></script>
+  </body>
+</html>
