@@ -1,6 +1,11 @@
 # h3-ops
 
-Companion for [antirez/h3.c](https://github.com/antirez/h3.c): **ContextDoc → Base (`h3`) → honest HD**, without forking Metal / DiT.
+Local companion for [antirez/h3.c](https://github.com/antirez/h3.c): **ContextDoc → Base (`h3`) → honest HD**.
+
+`h3.c` alone: wrong cwd (no shaders), no revise/lock loop, and local upscale that looks like Regenerate-2K.  
+`h3-ops` is the thin CLI that closes those gaps — without forking Metal / DiT.
+
+[![flow](docs/assets/hero-flow.svg)](https://quantz8a.github.io/h3-ops/)
 
 | Official module | Open? | Local stand-in |
 |:---|:---|:---|
@@ -8,28 +13,26 @@ Companion for [antirez/h3.c](https://github.com/antirez/h3.c): **ContextDoc → 
 | H3-Base | weights open | `ops` — doctor / gate / run / batch |
 | H3-Regenerate-2K | API only | `hd` — native → upscale → optional cloud 2K |
 
-**Truth artifact:** `ContextDoc` JSON ([schema](docs/schemas/context_doc.v1.json)). MP4 is a projection of doc + seed + preset.
+**Truth artifact:** `ContextDoc` JSON ([schema](docs/schemas/context_doc.v1.json)). MP4 is a projection of doc + seed + preset.  
+**Status:** Phase 0–4 MVP shipped (ops + cir + hd). Phase 5 = cloud adapters. See [DESIGN.md](DESIGN.md).
 
-**Status:** Phase 0–4 MVP — ops + cir + hd. Phase 5 = cloud adapters. See [DESIGN.md](DESIGN.md).
-
-## Requirements
-
-| Need | Notes |
-|:---|:---|
-| Apple Silicon | `arm64` |
-| Built `h3.c` | spawn **must** `chdir` to the tree that has `h3_shaders.metal` |
-| MiniMax-H3 BF16 | local path with `FL2VA/` — not shipped here |
-| `ffmpeg` / `ffprobe` | stitch / probe |
-| Optional LLM | OpenAI-compatible for `cir.compile` (never parallel with Base) |
-| Optional API key | only for cloud CIR / Regenerate-2K adapters |
-
-## Planned flow
+## Quick start
 
 ```bash
-export PATH="/Users/zzz858aaa/h3-ops/scripts:$PATH"   # or: PYTHONPATH=src python3 -m h3_ops
+git clone https://github.com/quantz8a/h3-ops.git
+cd h3-ops
+pip install -e .
+export H3_OPS_H3C_SRC=/path/to/h3.c          # tree that contains h3_shaders.metal
+export H3_OPS_MODEL_DIR=/path/to/MiniMax-H3   # must include FL2VA/
 h3ctl doctor
 h3ctl run --preset smoke --prompt-file examples/smoke.prompt.txt -o out/smoke.mp4
-# later:
+```
+
+Or without install: `PYTHONPATH=src python3 -m h3_ops …` / `./scripts/h3ctl …`.
+
+Typical loop:
+
+```bash
 h3ctl cir compile --brief "剑气削叶" -o shot.cir.json
 h3ctl cir validate shot.cir.json
 h3ctl run --preset preview --doc shot.cir.json -o out/preview.mp4
@@ -39,16 +42,27 @@ h3ctl hd deliver --doc shot.cir.json --base out/preview.mp4 \
 ```
 
 Working now: `doctor`, `presets`, `lock`, `run`, `cir *`, `hd ladder|deliver|stitch`.  
-Phase 5: optional cloud CIR / Regenerate-2K adapters.
+Demo ContextDoc: [examples/leafcut.cir.json](examples/leafcut.cir.json). Drop real clips under [examples/renders/](examples/renders/) (see README there).
 
-LLM (optional):
+### Optional LLM (cir only)
+
 ```bash
 export H3_OPS_LLM_BASE=http://127.0.0.1:11236/v1
 export H3_OPS_LLM_MODEL=local
 h3ctl cir compile --brief "..." --backend llm -o shot.cir.json
-h3ctl cir revise shot.cir.json --notes "剑气线不可读" --backend llm
 # never run LLM parallel with h3ctl run on the same GPU
 ```
+
+## Requirements
+
+| Need | Notes |
+|:---|:---|
+| Apple Silicon | `arm64` |
+| Built `h3.c` | spawn **must** `chdir` to the tree that has `h3_shaders.metal` |
+| MiniMax-H3 BF16 | local path with `FL2VA/` — not shipped here |
+| `ffmpeg` / `ffprobe` | stitch / probe |
+| Optional LLM | OpenAI-compatible for `cir.compile` |
+| Optional API key | cloud CIR / Regenerate-2K adapters only |
 
 ## Presets & wall-clock anchors
 
@@ -64,7 +78,7 @@ Measured on **M3 Ultra 96GB** with `--ssd-streaming` (order of magnitude):
 
 Field failures already seen: wrong cwd (no shaders), `mlx-serve` eating unified memory, free pages → 0 looking like a hang.
 
-## Config (planned env)
+## Config
 
 | Env | Default idea |
 |:---|:---|
@@ -77,15 +91,16 @@ Field failures already seen: wrong cwd (no shaders), `mlx-serve` eating unified 
 
 ## Non-goals
 
-- Reimplement DiT or redistribute weights  
-- Vendor drama / looksheet business  
-- Label local upscale as Regenerate-2K  
+- Reimplement DiT or redistribute weights
+- Vendor drama / looksheet business
+- Label local upscale as Regenerate-2K
 
-## Docs & example
+## Docs
 
-- Design SoT: [DESIGN.md](DESIGN.md)  
-- Schema: [docs/schemas/context_doc.v1.json](docs/schemas/context_doc.v1.json)  
-- Example doc: [examples/leafcut.cir.json](examples/leafcut.cir.json)  
+- Design SoT: [DESIGN.md](DESIGN.md)
+- Landing: https://quantz8a.github.io/h3-ops/
+- Schema: [docs/schemas/context_doc.v1.json](docs/schemas/context_doc.v1.json)
+- Example doc: [examples/leafcut.cir.json](examples/leafcut.cir.json)
 
 ## License
 

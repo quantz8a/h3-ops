@@ -1,6 +1,6 @@
 # h3-ops — DESIGN
 
-**Status:** Phase 0 complete (docs + schema + example). Implementation starts at Phase 1.  
+**Status:** Phase 0–4 MVP shipped (ops + cir + hd). Phase 5 = optional cloud adapters.  
 **Engines:** [antirez/h3.c](https://github.com/antirez/h3.c) (Base); optional MiniMax API (cloud CIR / Regenerate-2K).
 
 This file is the architecture SoT. Keep [README.md](README.md) short.

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="220" viewBox="0 0 960 220" role="img" aria-label="ContextDoc to Base to honest HD">
+  <rect width="960" height="220" fill="#0f1419"/>
+  <text x="32" y="36" fill="#9aa4b2" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14">h3-ops · thin companion for antirez/h3.c</text>
+  <rect x="32" y="60" width="220" height="100" rx="8" fill="#1a2330" stroke="#3d4f66"/>
+  <text x="52" y="98" fill="#e8eef7" font-family="ui-sans-serif, system-ui, sans-serif" font-size="20" font-weight="600">ContextDoc</text>
+  <text x="52" y="126" fill="#9aa4b2" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13">cir compile · revise</text>
+  <path d="M262 110 H318" stroke="#f1b467" stroke-width="2" marker-end="url(#a)"/>
+  <rect x="328" y="60" width="220" height="100" rx="8" fill="#1a2330" stroke="#3d4f66"/>
+  <text x="348" y="98" fill="#e8eef7" font-family="ui-sans-serif, system-ui, sans-serif" font-size="20" font-weight="600">Base (h3)</text>
+  <text x="348" y="126" fill="#9aa4b2" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13">doctor · lock · run</text>
+  <path d="M558 110 H614" stroke="#f1b467" stroke-width="2" marker-end="url(#a)"/>
+  <rect x="624" y="60" width="304" height="100" rx="8" fill="#1a2330" stroke="#f1b467"/>
+  <text x="644" y="98" fill="#e8eef7" font-family="ui-sans-serif, system-ui, sans-serif" font-size="20" font-weight="600">honest HD</text>
+  <text x="644" y="126" fill="#9aa4b2" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13">native · upscale_* · cloud_2k</text>
+  <text x="32" y="198" fill="#6b7785" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12">never label local upscale as Regenerate-2K</text>
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#f1b467"/>
+    </marker>
+  </defs>
+</svg>
