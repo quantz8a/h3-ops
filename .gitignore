@@ -47,6 +47,8 @@ tmp/
 # Marketing / demo assets that must ship in-repo
 !docs/assets/
 !docs/assets/**
+!docs/demo/
+!docs/demo/**
 !examples/renders/
 !examples/renders/README.md
 !examples/renders/.gitkeep

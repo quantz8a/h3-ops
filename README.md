@@ -1,9 +1,19 @@
 # h3-ops
 
-Local companion for [antirez/h3.c](https://github.com/antirez/h3.c): **ContextDoc → Base (`h3`) → honest HD**.
+**Local ops companion for [antirez/h3.c](https://github.com/antirez/h3.c)** — check the Mac, structure the prompt, run Base, deliver with honest HD labels. No Metal fork.
+
+[![Apple Silicon](https://img.shields.io/badge/Apple%20Silicon-arm64-black)](https://github.com/antirez/h3.c)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Site](https://img.shields.io/badge/site-quantz8a.github.io-0f1419)](https://quantz8a.github.io/h3-ops/)
 
 `h3.c` alone: wrong cwd (no shaders), no revise/lock loop, and local upscale that looks like Regenerate-2K.  
 `h3-ops` is the thin CLI that closes those gaps — without forking Metal / DiT.
+
+<p align="center">
+  <img src="docs/demo/smoke.gif" alt="h3-ops smoke preset (~1s, 512²) via h3ctl run" width="360" />
+</p>
+
+<p align="center"><sub>smoke preset · ~1s · 512² · <code>h3ctl run</code> on Apple Silicon</sub></p>
 
 [![flow](docs/assets/hero-flow.svg)](https://quantz8a.github.io/h3-ops/)
 
@@ -21,14 +31,17 @@ Local companion for [antirez/h3.c](https://github.com/antirez/h3.c): **ContextDo
 ```bash
 git clone https://github.com/quantz8a/h3-ops.git
 cd h3-ops
-pip install -e .
+python3 -m venv .venv && source .venv/bin/activate
+python -m pip install -e .
+
 export H3_OPS_H3C_SRC=/path/to/h3.c          # tree that contains h3_shaders.metal
 export H3_OPS_MODEL_DIR=/path/to/MiniMax-H3   # must include FL2VA/
 h3ctl doctor
 h3ctl run --preset smoke --prompt-file examples/smoke.prompt.txt -o out/smoke.mp4
 ```
 
-Or without install: `PYTHONPATH=src python3 -m h3_ops …` / `./scripts/h3ctl …`.
+Needs: Apple Silicon, a **built** [h3.c](https://github.com/antirez/h3.c), MiniMax-H3 with `FL2VA/`, and `ffmpeg` / `ffprobe`.  
+Without install: `PYTHONPATH=src python3 -m h3_ops …` or `./scripts/h3ctl …`.
 
 Typical loop:
 
@@ -76,7 +89,7 @@ Measured on **M3 Ultra 96GB** with `--ssd-streaming` (order of magnitude):
 | `deliver` | 480×832 | 124 | 20–30 | 7–14 min | hero; gate must be green |
 | `unsafe_hq` | ≥576×1024 | 124 | ≥20 | high | jetsam risk if mlx alive |
 
-Field failures already seen: wrong cwd (no shaders), `mlx-serve` eating unified memory, free pages → 0 looking like a hang.
+Field failures already seen: wrong cwd (no shaders), `mlx-serve` eating unified memory, free pages → 0 looking like a hang. Start with `h3ctl doctor`.
 
 ## Config
 
