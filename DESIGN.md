@@ -17,6 +17,16 @@ This file is the architecture SoT. Keep [README.md](README.md) short.
 
 `h3-ops` is a **thin companion**, not a Metal fork.
 
+### Value proposition
+
+| Claim | True? |
+|:---|:---|
+| Same Base job finishes faster (fewer Metal ms) | **No** — still `./h3` with the same knobs |
+| More usable shots per day | **Yes** — doctor/lock avoid dead runs; presets stop overbuilding; CIR revise cuts prompt churn; HD stays labeled so you iterate at Base |
+| Drama / manju factory “gets faster” | Only after it **calls** `h3ctl` instead of raw `./h3`; this repo does not embed factory logic |
+
+Speed here means **production velocity** (less waste), not **inference throughput**.
+
 ---
 
 ## 2. Principles

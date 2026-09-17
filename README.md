@@ -7,6 +7,13 @@
 [![Release](https://img.shields.io/github/v/release/quantz8a/h3-ops?label=release)](https://github.com/quantz8a/h3-ops/releases/tag/v0.1.0)
 [![Site](https://img.shields.io/badge/site-quantz8a.github.io-0f1419)](https://quantz8a.github.io/h3-ops/)
 
+### Value (read this first)
+
+| Speeds up | Does **not** speed up |
+|:---|:---|
+| **Production velocity** — fewer wasted runs, less mlx/cwd thrash, revise-before-rerun, preset ladder before hero shots | **DiT wall-clock** — same `h3` binary, same steps / canvas / frames |
+| Effective shots per day when ops pain and prompt churn dominate | Metal kernels, Turbo LoRA, parallel Base on one GPU |
+
 `h3.c` alone: wrong cwd (no shaders), no revise/lock loop, and local upscale that looks like Regenerate-2K.  
 `h3-ops` is the thin CLI that closes those gaps — without forking Metal / DiT.
 
@@ -105,9 +112,10 @@ Field failures already seen: wrong cwd (no shaders), `mlx-serve` eating unified 
 
 ## Non-goals
 
-- Reimplement DiT or redistribute weights
-- Vendor drama / looksheet business
-- Label local upscale as Regenerate-2K
+- Faster DiT / new kernels / redistributing weights  
+- Vendor drama / looksheet business  
+- Label local upscale as Regenerate-2K  
+- Claiming “2× inference” — value is **fewer failed and overbuilt runs**, not a shorter denoise loop
 
 ## Docs
 
