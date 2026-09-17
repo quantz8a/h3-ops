@@ -4,6 +4,7 @@
 
 [![Apple Silicon](https://img.shields.io/badge/Apple%20Silicon-arm64-black)](https://github.com/antirez/h3.c)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Release](https://img.shields.io/github/v/release/quantz8a/h3-ops?label=release)](https://github.com/quantz8a/h3-ops/releases/tag/v0.1.0)
 [![Site](https://img.shields.io/badge/site-quantz8a.github.io-0f1419)](https://quantz8a.github.io/h3-ops/)
 
 `h3.c` alone: wrong cwd (no shaders), no revise/lock loop, and local upscale that looks like Regenerate-2K.  
@@ -112,8 +113,10 @@ Field failures already seen: wrong cwd (no shaders), `mlx-serve` eating unified 
 
 - Design SoT: [DESIGN.md](DESIGN.md)
 - Landing: https://quantz8a.github.io/h3-ops/
+- Release: https://github.com/quantz8a/h3-ops/releases/tag/v0.1.0
 - Schema: [docs/schemas/context_doc.v1.json](docs/schemas/context_doc.v1.json)
 - Example doc: [examples/leafcut.cir.json](examples/leafcut.cir.json)
+- Discussions: https://github.com/quantz8a/h3-ops/discussions
 
 ## License
 
