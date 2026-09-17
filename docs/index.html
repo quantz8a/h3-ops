@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>h3-ops — ContextDoc → Base → honest HD</title>
-  <meta name="description" content="Local companion for antirez/h3.c: doctor/lock/run, ContextDoc revise loop, honest HD labels." />
-  <meta property="og:title" content="h3-ops" />
-  <meta property="og:description" content="Thin companion for antirez/h3.c — ContextDoc → Base → honest HD." />
+  <title>h3-ops — local companion for antirez/h3.c</title>
+  <meta name="description" content="Local ops for antirez/h3.c on Apple Silicon: doctor, ContextDoc CIR, presets, honest HD. No Metal fork." />
+  <meta property="og:title" content="h3-ops — companion for antirez/h3.c" />
+  <meta property="og:description" content="Check the Mac, structure the prompt, run Base, deliver with honest HD labels." />
   <meta property="og:image" content="https://quantz8a.github.io/h3-ops/assets/social-preview.png" />
   <style>
     :root { color-scheme: dark; --bg:#0f1419; --fg:#e8eef7; --muted:#9aa4b2; --line:#3d4f66; --accent:#f1b467; }
@@ -17,6 +17,8 @@
     .tag { color: var(--accent); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.85rem; }
     p { color: var(--muted); line-height: 1.55; }
     .hero { width: 100%; height: auto; margin: 28px 0; border: 1px solid var(--line); border-radius: 8px; }
+    .demo { display: block; width: min(360px, 100%); height: auto; margin: 20px 0 8px; border: 1px solid var(--line); border-radius: 8px; background: #000; }
+    .cap { margin: 0 0 24px; font-size: 0.85rem; color: var(--muted); }
     ul { color: var(--muted); line-height: 1.6; padding-left: 1.2rem; }
     a { color: var(--accent); }
     code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.9em; background: #1a2330; padding: 0.1em 0.35em; border-radius: 4px; }
@@ -27,18 +29,22 @@
 <body>
   <main>
     <div class="tag">quantz8a / h3-ops</div>
-    <h1>ContextDoc → Base → honest HD</h1>
+    <h1>Check → ContextDoc → Base → honest HD</h1>
     <p>
       <code>h3.c</code> alone: wrong cwd (missing shaders), no revise/lock loop,
-      local upscale that reads like Regenerate-2K. <strong>h3-ops</strong> is the thin CLI that closes those gaps.
+      local upscale that reads like Regenerate-2K. <strong>h3-ops</strong> is the thin CLI that closes those gaps on Apple Silicon.
     </p>
+    <img class="demo" src="https://raw.githubusercontent.com/quantz8a/h3-ops/main/docs/demo/smoke.gif" width="360" height="360" alt="h3-ops smoke preset demo" />
+    <p class="cap">smoke preset · ~1s · 512² · <code>h3ctl run</code></p>
     <img class="hero" src="assets/hero-flow.svg" alt="Flow: ContextDoc to Base to honest HD" />
     <ul>
       <li><code>cir</code> — compile / validate / revise / emit ContextDoc</li>
       <li><code>ops</code> — doctor / gate / GPU lock / run / batch</li>
       <li><code>hd</code> — native · upscale_* · cloud_2k (labels stay honest)</li>
     </ul>
-    <pre>pip install -e .
+    <pre>git clone https://github.com/quantz8a/h3-ops.git && cd h3-ops
+python3 -m venv .venv && source .venv/bin/activate
+python -m pip install -e .
 export H3_OPS_H3C_SRC=/path/to/h3.c
 export H3_OPS_MODEL_DIR=/path/to/MiniMax-H3
 h3ctl doctor

@@ -5,10 +5,25 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "h3-ops"
 version = "0.1.0"
-description = "Companion ops for antirez/h3.c"
+description = "Local companion for antirez/h3.c — doctor, ContextDoc CIR, presets, honest HD"
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
+keywords = [
+  "minimax-h3",
+  "h3.c",
+  "apple-silicon",
+  "video-generation",
+  "mlx",
+  "context-ir",
+]
+authors = [{ name = "quantz8a" }]
+
+[project.urls]
+Homepage = "https://quantz8a.github.io/h3-ops/"
+Repository = "https://github.com/quantz8a/h3-ops"
+Issues = "https://github.com/quantz8a/h3-ops/issues"
+Documentation = "https://github.com/quantz8a/h3-ops/blob/main/DESIGN.md"
 
 [project.scripts]
 h3ctl = "h3_ops.cli:main"
