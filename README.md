@@ -14,7 +14,8 @@
 | **Goal** | Mac Ultra 上 MiniMax-H3 **秒级出图/试片**（再升到可交付） |
 | **How** | Pin the `h3.c` fast knobs (`snap` / warm session), kill wasted cold starts (doctor / GPU lock / no mlx fight), only then spend minutes on `preview`/`deliver` |
 | **Not** | Replacing Metal kernels inside `h3.c`. We orchestrate the second-scale path; antirez owns the denoise math |
-| **Today** | Cold `smoke` e2e on M3 Ultra 96GB ≈ **66s** (load + TE + denoise). Published M5 Max **denoise** for 512²·22f·4step ≈ **3.5s**. Gap = residency + preset discipline |
+| **Today** | M3 Ultra 96GB measured: `snap` cold e2e **35.2s** (TE 7.8 + DiT load 15.2 + denoise **5.6** + VAE). Cold `smoke` ≈ **66s**. Gap to 秒出 ≈ **warm DiT residency** (interactive / `h3ctl warm`) |
+
 
 ```bash
 h3ctl doctor          # mlx / rivals must be clear
