@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "h3-ops"
 version = "0.1.0"
-description = "Production-velocity companion for antirez/h3.c (not faster DiT): doctor, ContextDoc CIR, presets, honest HD"
+description = "Mac Ultra MiniMax-H3 秒出 companion for antirez/h3.c: snap presets, doctor, ContextDoc, honest HD"
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }

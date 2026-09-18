@@ -1,21 +1,29 @@
 # h3-ops
 
-**Local ops companion for [antirez/h3.c](https://github.com/antirez/h3.c)** — check the Mac, structure the prompt, run Base, deliver with honest HD labels. No Metal fork.
+**North star:** on **Mac Ultra + MiniMax-H3**, make local pulls feel like **秒出** — via [antirez/h3.c](https://github.com/antirez/h3.c) fast paths, warm residency, and an ops ladder. No Metal fork.
 
 [![Apple Silicon](https://img.shields.io/badge/Apple%20Silicon-arm64-black)](https://github.com/antirez/h3.c)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Release](https://img.shields.io/github/v/release/quantz8a/h3-ops?label=release)](https://github.com/quantz8a/h3-ops/releases/tag/v0.1.0)
 [![Site](https://img.shields.io/badge/site-quantz8a.github.io-0f1419)](https://quantz8a.github.io/h3-ops/)
 
-### Value (read this first)
+### Goal → reality (read this first)
 
-| Speeds up | Does **not** speed up |
+| | |
 |:---|:---|
-| **Production velocity** — fewer wasted runs, less mlx/cwd thrash, revise-before-rerun, preset ladder before hero shots | **DiT wall-clock** — same `h3` binary, same steps / canvas / frames |
-| Effective shots per day when ops pain and prompt churn dominate | Metal kernels, Turbo LoRA, parallel Base on one GPU |
+| **Goal** | Mac Ultra 上 MiniMax-H3 **秒级出图/试片**（再升到可交付） |
+| **How** | Pin the `h3.c` fast knobs (`snap` / warm session), kill wasted cold starts (doctor / GPU lock / no mlx fight), only then spend minutes on `preview`/`deliver` |
+| **Not** | Replacing Metal kernels inside `h3.c`. We orchestrate the second-scale path; antirez owns the denoise math |
+| **Today** | Cold `smoke` e2e on M3 Ultra 96GB ≈ **66s** (load + TE + denoise). Published M5 Max **denoise** for 512²·22f·4step ≈ **3.5s**. Gap = residency + preset discipline |
 
-`h3.c` alone: wrong cwd (no shaders), no revise/lock loop, and local upscale that looks like Regenerate-2K.  
-`h3-ops` is the thin CLI that closes those gaps — without forking Metal / DiT.
+```bash
+h3ctl doctor          # mlx / rivals must be clear
+h3ctl run --preset snap --prompt-file examples/smoke.prompt.txt -o out/snap.mp4 --profile
+```
+
+`h3.c` alone: wrong cwd (no shaders), no revise/lock loop, easy to accidentally run 14‑min hero shots while iterating.  
+`h3-ops` makes the **秒出 ladder** the default path — without forking Metal / DiT.
+
 
 <p align="center">
   <img src="docs/demo/smoke.gif" alt="h3-ops smoke preset (~1s, 512²) via h3ctl run" width="360" />
@@ -45,7 +53,8 @@ python -m pip install -e .
 export H3_OPS_H3C_SRC=/path/to/h3.c          # tree that contains h3_shaders.metal
 export H3_OPS_MODEL_DIR=/path/to/MiniMax-H3   # must include FL2VA/
 h3ctl doctor
-h3ctl run --preset smoke --prompt-file examples/smoke.prompt.txt -o out/smoke.mp4
+h3ctl run --preset snap --prompt-file examples/smoke.prompt.txt -o out/snap.mp4 --profile
+# or: smoke / draw / preview / deliver
 ```
 
 Needs: Apple Silicon, a **built** [h3.c](https://github.com/antirez/h3.c), MiniMax-H3 with `FL2VA/`, and `ffmpeg` / `ffprobe`.  
@@ -90,17 +99,21 @@ h3ctl cir compile --brief "..." --backend llm -o shot.cir.json
 
 ## Presets & wall-clock anchors
 
-Measured on **M3 Ultra 96GB** with `--ssd-streaming` (order of magnitude):
+Measured on **M3 Ultra 96GB** unless noted. **秒出 starts at `snap`**, not `deliver`.
 
-| preset | canvas | frames | steps | ~wall | use |
-|:---|:---|:---:|:---:|:---|:---|
-| `smoke` | 512² | 22 | 4 | ~66s (h3ctl) | path check |
-| `draw` | 480×832 | 56 | 4–8 | ~2 min | vertical card pulls |
-| `preview` | 480×832 | 124 | 8 | ~5 min | ≥5s review |
-| `deliver` | 480×832 | 124 | 20–30 | 7–14 min | hero; gate must be green |
-| `unsafe_hq` | ≥576×1024 | 124 | ≥20 | high | jetsam risk if mlx alive |
+| preset | canvas | frames | steps | knobs | ~wall | use |
+|:---|:---|:---:|:---:|:---|:---|:---|
+| `snap` | 512² | 22 | 4 | layers40·reuse3·rw384 | **target: seconds denoise (warm)**; cold e2e TBD | 秒级试片 |
+| `snap256` | 256² | 22 | 4 | layers40·reuse3 | fastest composition pull | 构图闪看 |
+| `smoke` | 512² | 22 | 4 | default | ~66s cold e2e | path check |
+| `draw` | 480×832 | 56 | 4–8 | — | ~2 min | vertical card |
+| `preview` | 480×832 | 124 | 8 | — | ~5 min | ≥5s review |
+| `deliver` | 480×832 | 124 | 20–30 | — | 7–14 min | hero; gate green |
+| `unsafe_hq` | ≥576×1024 | 124 | ≥20 | — | high | jetsam if mlx alive |
 
-Field failures already seen: wrong cwd (no shaders), `mlx-serve` eating unified memory, free pages → 0 looking like a hang. Start with `h3ctl doctor`.
+Upstream reference: M5 Max denoise ≈ **3.5s** for 512²·22f·4step ([h3.c](https://github.com/antirez/h3.c)). Ultra cold e2e is dominated by load + text-encoder unless DiT stays resident (interactive / future `h3ctl warm`).
+
+Field failures: wrong cwd (no shaders), `mlx-serve` eating unified memory, free pages → 0 looking like a hang. **秒出 requires `h3ctl doctor` green/yellow without rival `./h3` and preferably without mlx Base fight.**
 
 ## Config
 
@@ -115,10 +128,10 @@ Field failures already seen: wrong cwd (no shaders), `mlx-serve` eating unified 
 
 ## Non-goals
 
-- Faster DiT / new kernels / redistributing weights  
+- Forking / reimplementing Metal DiT or redistributing weights  
 - Vendor drama / looksheet business  
 - Label local upscale as Regenerate-2K  
-- Claiming “2× inference” — value is **fewer failed and overbuilt runs**, not a shorter denoise loop
+- Claiming deliver-quality 5s clips in one second — **秒出 is the snap ladder; hero stays slow on purpose**
 
 ## Docs
 

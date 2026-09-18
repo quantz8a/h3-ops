@@ -66,8 +66,12 @@ def build_argv(
         argv.extend(["--first-frame", str(first_frame.resolve())])
     if last_frame is not None:
         argv.extend(["--last-frame", str(last_frame.resolve())])
+    if preset.render_width is not None:
+        argv.extend(["--render-width", str(int(preset.render_width))])
     if preset.reuse is not None:
         argv.extend(["--reuse", str(int(preset.reuse))])
+    if preset.core_reuse is not None:
+        argv.extend(["--core-reuse", str(int(preset.core_reuse))])
     if preset.layers is not None:
         argv.extend(["--layers", str(int(preset.layers))])
     if seed is not None:

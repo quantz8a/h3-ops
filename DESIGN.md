@@ -1,6 +1,7 @@
 # h3-ops — DESIGN
 
-**Status:** Phase 0–4 MVP shipped (ops + cir + hd). Phase 5 = optional cloud adapters.  
+**North star:** Mac Ultra + MiniMax-H3 **秒出** (snap / warm), then climb to deliver.  
+**Status:** Phase 0–4 MVP shipped (ops + cir + hd). Phase 5 = cloud adapters + warm session.  
 **Engines:** [antirez/h3.c](https://github.com/antirez/h3.c) (Base); optional MiniMax API (cloud CIR / Regenerate-2K).
 
 This file is the architecture SoT. Keep [README.md](README.md) short.
@@ -9,23 +10,23 @@ This file is the architecture SoT. Keep [README.md](README.md) short.
 
 ## 1. Problem
 
-`h3.c` alone leaves three gaps:
+`h3.c` alone leaves four gaps for a manju / Ultra workflow:
 
-1. **No Context-IR** — cloud module is API-only; bare prompts break lock / revise loops.
-2. **Ops pain** — wrong cwd (missing `h3_shaders.metal`), `mlx-serve` vs DiT memory fight, jetsam, “hung” jobs that are swapping.
-3. **No honest HD** — Regenerate-2K closed; Base ~480–768 class; delivery still needs a labeled ladder.
+1. **Seconds are possible but not the default** — users burn 5–14 min hero presets while iterating; cold e2e hides a few-second denoise behind TE/load.
+2. **No Context-IR** — cloud module is API-only; bare prompts break lock / revise loops.
+3. **Ops pain** — wrong cwd (missing `h3_shaders.metal`), `mlx-serve` vs DiT memory fight, jetsam, “hung” jobs that are swapping.
+4. **No honest HD** — Regenerate-2K closed; Base ~480–768 class; delivery still needs a labeled ladder.
 
-`h3-ops` is a **thin companion**, not a Metal fork.
+`h3-ops` is a **thin companion**, not a Metal fork: it makes the **秒出 ladder** (`snap` → `draw` → `preview` → `deliver`) and residency rules the product.
 
 ### Value proposition
 
 | Claim | True? |
 |:---|:---|
-| Same Base job finishes faster (fewer Metal ms) | **No** — still `./h3` with the same knobs |
-| More usable shots per day | **Yes** — doctor/lock avoid dead runs; presets stop overbuilding; CIR revise cuts prompt churn; HD stays labeled so you iterate at Base |
-| Drama / manju factory “gets faster” | Only after it **calls** `h3ctl` instead of raw `./h3`; this repo does not embed factory logic |
-
-Speed here means **production velocity** (less waste), not **inference throughput**.
+| Mac Ultra can approach **秒级试片** | **Yes, as a product goal** — pin `snap` / warm DiT; measure denoise vs e2e |
+| We rewrite Metal for free speedups | **No** — antirez/`h3.c` owns kernels |
+| Companion alone turns every deliver into 1s | **No** — hero quality stays expensive; 秒出 is the iteration tier |
+| Drama factory gets faster | **Yes** once it calls `h3ctl` (`scripts/h3c_from_shot.py`) with `PRESET=snap` first |
 
 ---
 
@@ -38,7 +39,8 @@ Speed here means **production velocity** (less waste), not **inference throughpu
 5. Honest HD labels: `native` | `upscale_*` | `cloud_2k`.
 6. No weights in-repo.
 7. Drama / manju-factory stay outside; they call `h3ctl` (see factory `scripts/h3c_from_shot.py`).
-8. Factory hard rule on large Macs: prefer `--no-ssd-streaming` (memory-resident DiT).
+8. Factory hard rule on large Macs: prefer `--no-ssd-streaming` (memory-resident DiT) for snap/warm.
+9. **秒出 before deliver** — default iteration preset is `snap` / `snap256`; never open with `deliver`.
 
 ---
 

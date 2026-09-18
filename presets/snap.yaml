@@ -1,0 +1,13 @@
+# snap — Mac Ultra 秒级试片（质量换速度）
+
+id: snap
+width: 512
+height: 512
+frames: 22
+steps: 4
+ssd_streaming: false
+layers: 40
+reuse: 3
+render_width: 384
+requires_gate: false
+notes: "North-star fast path: small canvas + aggressive reuse/layers. Denoise target: seconds after warm; cold e2e still loads TE/DiT."

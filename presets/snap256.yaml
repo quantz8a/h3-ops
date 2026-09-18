@@ -1,0 +1,12 @@
+# snap256 — 更狠的秒级预览（构图可能漂）
+
+id: snap256
+width: 256
+height: 256
+frames: 22
+steps: 4
+ssd_streaming: false
+layers: 40
+reuse: 3
+requires_gate: false
+notes: "Native 256 preview. Use for composition pulls only; expect divergence from deliver."

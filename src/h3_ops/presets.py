@@ -14,6 +14,8 @@ class Preset:
     ssd_streaming: bool = True
     layers: int | None = None
     reuse: int | None = None
+    render_width: int | None = None
+    core_reuse: int | None = None
     requires_gate: bool = False
     requires_i_know: bool = False
     notes: str = ""
@@ -62,6 +64,8 @@ def load_preset_file(path: Path) -> Preset:
         ssd_streaming=bool(data.get("ssd_streaming", True)),
         layers=data.get("layers"),
         reuse=data.get("reuse"),
+        render_width=data.get("render_width"),
+        core_reuse=data.get("core_reuse"),
         requires_gate=bool(data.get("requires_gate", False)),
         requires_i_know=bool(data.get("requires_i_know", False)),
         notes=str(data.get("notes") or ""),
