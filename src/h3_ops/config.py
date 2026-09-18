@@ -81,4 +81,9 @@ class Config:
 
     @property
     def ssd_streaming_default(self) -> bool:
-        return self.ram_gb >= 64.0
+        """SSD streaming is a memory/speed tradeoff — slower when RAM is ample.
+
+        h3.c does NOT enable it by default. We only default it ON below 64 GiB
+        so low-memory Macs survive; Ultra / 96GB stay memory-resident (fast).
+        """
+        return 0.0 < self.ram_gb < 64.0

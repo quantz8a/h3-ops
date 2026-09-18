@@ -5,6 +5,8 @@ width: 480
 height: 832
 frames: 124
 steps: 24
-ssd_streaming: true
+ssd_streaming: false
+layers: 50
+reuse: 1
 requires_gate: true
-notes: "steps 20–30; doctor must be green; ~7–14 min"
+notes: "steps 20–30; full layers; resident DiT on Ultra; ~7–14 min"

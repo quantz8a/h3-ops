@@ -11,7 +11,7 @@ from h3_ops.cir.validate import require_valid
 from h3_ops.config import Config
 from h3_ops.ops.gate import GateError, gate
 from h3_ops.ops.lock import LockError, acquire_lock, release_lock
-from h3_ops.ops.report import argv_hash, new_job_id, start_report
+from h3_ops.ops.report import argv_hash, new_job_id, parse_profile_log, start_report
 from h3_ops.presets import Preset
 
 
@@ -19,12 +19,26 @@ class RunError(RuntimeError):
     pass
 
 
+def resolve_ssd_streaming(
+    cfg: Config,
+    preset: Preset,
+    *,
+    ssd_streaming: bool | None,
+) -> bool:
+    """CLI override > preset explicit > RAM-aware default."""
+    if ssd_streaming is not None:
+        return bool(ssd_streaming)
+    if preset.ssd_streaming is not None:
+        return bool(preset.ssd_streaming)
+    return bool(cfg.ssd_streaming_default)
+
+
 def build_argv(
     cfg: Config,
     preset: Preset,
     *,
-    prompt: str,
-    output: Path,
+    prompt: str | None,
+    output: Path | None,
     seed: int | None,
     width: int | None = None,
     height: int | None = None,
@@ -33,33 +47,27 @@ def build_argv(
     first_frame: Path | None = None,
     last_frame: Path | None = None,
     ssd_streaming: bool | None = None,
+    interactive: bool = False,
 ) -> list[str]:
     # Always invoke as ./h3 from h3c_src so relative Metal shaders resolve.
-    argv = [
-        "./h3",
-        "-d",
-        str(cfg.model_dir),
-        "-p",
-        prompt,
-        "--width",
-        str(width if width is not None else preset.width),
-        "--height",
-        str(height if height is not None else preset.height),
-        "--frames",
-        str(frames if frames is not None else preset.frames),
-        "--steps",
-        str(preset.steps),
-        "-o",
-        str(output.resolve()),
-    ]
-    if ssd_streaming is None:
-        use_ssd = (
-            preset.ssd_streaming
-            if preset.ssd_streaming is not None
-            else bool(cfg.ssd_streaming_default)
-        )
-    else:
-        use_ssd = bool(ssd_streaming)
+    argv = ["./h3", "-d", str(cfg.model_dir)]
+    if not interactive:
+        if prompt is None or output is None:
+            raise RunError("one-shot run requires prompt and output")
+        argv.extend(["-p", prompt, "-o", str(output.resolve())])
+    argv.extend(
+        [
+            "--width",
+            str(width if width is not None else preset.width),
+            "--height",
+            str(height if height is not None else preset.height),
+            "--frames",
+            str(frames if frames is not None else preset.frames),
+            "--steps",
+            str(preset.steps),
+        ]
+    )
+    use_ssd = resolve_ssd_streaming(cfg, preset, ssd_streaming=ssd_streaming)
     if use_ssd:
         argv.append("--ssd-streaming")
     if first_frame is not None:
@@ -72,17 +80,29 @@ def build_argv(
         if rw is None and rh is not None:
             rw = rh
         if rh is None and rw is not None:
-            # keep output aspect
             out_w = width if width is not None else preset.width
             out_h = height if height is not None else preset.height
             rh = max(64, int(round(rw * out_h / out_w)))
         argv.extend(["--render-width", str(int(rw)), "--render-height", str(int(rh))])
+    if preset.reuse is not None and preset.core_reuse is not None:
+        raise RunError("preset cannot set both reuse and core_reuse (h3.c exclusive)")
     if preset.reuse is not None:
         argv.extend(["--reuse", str(int(preset.reuse))])
     if preset.core_reuse is not None:
         argv.extend(["--core-reuse", str(int(preset.core_reuse))])
     if preset.layers is not None:
         argv.extend(["--layers", str(int(preset.layers))])
+    if preset.token_reduction:
+        # antirez: do not combine with layers40 AND reuse3
+        if preset.layers == 40 and preset.reuse == 3:
+            raise RunError(
+                "token_reduction incompatible with layers=40 and reuse=3"
+            )
+        argv.append("--token-reduction")
+    if preset.use_int8_row_fc2:
+        if use_ssd:
+            raise RunError("--use-int8-row-fc2 cannot combine with --ssd-streaming")
+        argv.append("--use-int8-row-fc2")
     if seed is not None:
         argv.extend(["--seed", str(seed)])
     if extra:
@@ -187,11 +207,22 @@ def run_job(
     ]
     warnings.extend(emit_warnings)
 
+    use_ssd = resolve_ssd_streaming(cfg, preset, ssd_streaming=ssd_streaming)
+    if use_ssd and cfg.ram_gb >= 64:
+        warnings.append(
+            "ssd_streaming=ON on ≥64GiB Mac — slower than resident DiT; "
+            "prefer omitting --ssd-streaming"
+        )
+    elif not use_ssd:
+        warnings.append("ssd_streaming=OFF (memory-resident DiT — fast path)")
+
     output = output.resolve()
     output.parent.mkdir(parents=True, exist_ok=True)
     log_path = output.with_suffix(output.suffix + ".log")
     report_path = output.with_suffix(output.suffix + ".report.json")
 
+    # Always profile snap* so denoise vs e2e is visible without extra flags.
+    want_profile = profile or preset.id.startswith("snap")
     argv = build_argv(
         cfg,
         preset,
@@ -201,7 +232,7 @@ def run_job(
         width=width,
         height=height,
         frames=frames,
-        extra=["--profile"] if profile else None,
+        extra=["--profile"] if want_profile else None,
         first_frame=first_frame,
         last_frame=last_frame,
         ssd_streaming=ssd_streaming,
@@ -265,6 +296,8 @@ def run_job(
     job.exit_code = rc
     job.wall_s = round(t1 - t0, 3)
     job.ended_at = datetime.now(timezone.utc).astimezone().isoformat(timespec="seconds")
+    if want_profile and log_path.is_file():
+        job.phases = parse_profile_log(log_path.read_text(encoding="utf-8", errors="replace"))
     if rc != 0:
         job.warnings.append(f"h3 exited {rc}")
     if rc == 0 and not output.is_file():
@@ -272,5 +305,28 @@ def run_job(
         rc = 2
         job.exit_code = rc
     job.write(report_path)
-    print(f"exit={rc} wall_s={job.wall_s} report={report_path}", file=sys.stderr)
+    denoise = (job.phases or {}).get("denoise_s")
+    extra = f" denoise_s={denoise}" if denoise is not None else ""
+    print(
+        f"exit={rc} wall_s={job.wall_s}{extra} report={report_path}",
+        file=sys.stderr,
+    )
     return rc
+
+
+def warm_argv(
+    cfg: Config,
+    preset: Preset,
+    *,
+    ssd_streaming: bool | None = None,
+) -> list[str]:
+    """Interactive h3 session argv — keeps TE/DiT/VAE resident across prompts."""
+    return build_argv(
+        cfg,
+        preset,
+        prompt=None,
+        output=None,
+        seed=None,
+        ssd_streaming=ssd_streaming,
+        interactive=True,
+    )

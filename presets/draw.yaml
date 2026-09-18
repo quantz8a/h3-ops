@@ -1,10 +1,13 @@
-# draw — vertical card pulls
+# draw — vertical card pulls (fast knobs)
 
 id: draw
 width: 480
 height: 832
 frames: 56
 steps: 6
-ssd_streaming: true
+ssd_streaming: false
+layers: 45
+reuse: 2
+token_reduction: true
 requires_gate: false
-notes: "Short vertical cards; steps 4–8 OK"
+notes: "Short vertical cards; layers45+reuse2+token-reduction (validated combo)."

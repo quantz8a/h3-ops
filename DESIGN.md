@@ -2,7 +2,7 @@
 
 **Brand:** **h3-opt** — 苹果平台极致性能（repo/CLI still `h3-ops` / `h3ctl`).  
 **North star:** Mac Ultra + MiniMax-H3 **秒出** (snap / warm), then climb to deliver.  
-**Status:** Phase 0–4 MVP shipped (ops + cir + hd). Phase 5 = cloud adapters + warm session.  
+**Status:** Phase 0–4 MVP shipped (ops + cir + hd). Phase 5 partial: **`h3ctl warm`** + resident-by-default on ≥64GB; cloud adapters still open.
 **Engines:** [antirez/h3.c](https://github.com/antirez/h3.c) (Base); optional MiniMax API (cloud CIR / Regenerate-2K).
 
 This file is the architecture SoT. Keep [README.md](README.md) short.
@@ -44,8 +44,9 @@ This file is the architecture SoT. Keep [README.md](README.md) short.
 5. Honest HD labels: `native` | `upscale_*` | `cloud_2k`.
 6. No weights in-repo.
 7. Drama / manju-factory stay outside; they call `h3ctl` (see factory `scripts/h3c_from_shot.py`).
-8. Factory hard rule on large Macs: prefer `--no-ssd-streaming` (memory-resident DiT) for snap/warm.
-9. **秒出 before deliver** — default iteration preset is `snap` / `snap256`; never open with `deliver`.
+8. Factory hard rule on large Macs: **never** default `--ssd-streaming` when RAM ≥ 64GB (memory-resident DiT). SSD stream only on low-RAM or explicit `--ssd-streaming`.
+9. **秒出 before deliver** — default iteration is `snap` / `h3ctl warm`; never open with `deliver`.
+10. Small step counts keep `--reuse 1` (antirez); do not pair `token-reduction` with `layers40`+`reuse3`.
 
 ---
 
@@ -196,7 +197,8 @@ Revise always appends `{ts, notes, backend}` to `revise_log`.
 |:---|:---|
 | `doctor` | arch, metal, binary, shaders, `FL2VA`, free pages, competing ports/PIDs |
 | `gate` | red doctor → refuse; `unsafe_hq` / unsafe canvas → need `--i-know` |
-| `run` | validate? → emit? → lock → spawn → report |
+| `run` | validate? → emit? → lock → spawn → report (+ profile phases for snap*) |
+| `warm` | interactive h3 session — TE/DiT/VAE stay resident across prompts |
 | `batch` | serial queue only |
 | `report` | print / dump last job JSON |
 
@@ -206,13 +208,15 @@ Phase 1 `run` accepts `--prompt-file` without ContextDoc. Phase 2+ prefers `--do
 
 ```text
 chdir($H3_OPS_H3C_SRC)          # h3_shaders.metal must resolve
-argv: ./h3 --model $H3_OPS_MODEL_DIR --prompt-file P
+argv: ./h3 -d $H3_OPS_MODEL_DIR -p PROMPT -o OUT
       --width W --height H --frames F --steps S [--seed N]
-      --ssd-streaming           # default ON if RAM ≥ 64GB
-      [extra from preset]
+      [--ssd-streaming]         # ONLY if RAM < 64GB or user forces
+      [extra from preset: layers/reuse/token-reduction/…]
 stdout/err → <out_stem>.log
 lock → $H3_OPS_LOCK  (PID, started_at, argv_hash)
 ```
+
+`h3ctl warm` omits `-p`/`-o` so h3 enters interactive mode (Iris-style residency).
 
 Live PID holds lock → fail with holder info. Dead PID → steal + warn.
 

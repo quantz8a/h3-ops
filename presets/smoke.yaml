@@ -1,10 +1,12 @@
-# smoke — path / shader / model check
+# smoke — path / shader / model check (fast resident path)
 
 id: smoke
 width: 512
 height: 512
 frames: 22
 steps: 4
-ssd_streaming: true
+ssd_streaming: false
+layers: 45
+reuse: 1
 requires_gate: false
-notes: "Cheapest green-path check; ~1–2 min on M3 Ultra 96GB"
+notes: "Green-path check on resident DiT; do not enable SSD on Ultra."

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 import time
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
@@ -27,6 +28,7 @@ class JobReport:
     output_mp4: str | None = None
     log_path: str | None = None
     warnings: list[str] = field(default_factory=list)
+    phases: dict[str, float] | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -37,6 +39,38 @@ class JobReport:
             json.dumps(self.to_dict(), indent=2, ensure_ascii=False) + "\n",
             encoding="utf-8",
         )
+
+
+def parse_profile_log(text: str) -> dict[str, float]:
+    """Extract coarse phase seconds from h3 --profile log lines."""
+    phases: dict[str, float] = {}
+    # Match common labels: "text encoder", "DiT load", "denoise", "VAE", etc.
+    patterns = {
+        "text_encoder_s": re.compile(
+            r"(?i)(?:text[_\s-]*encoder|TE)\D{0,40}?(\d+(?:\.\d+)?)\s*s"
+        ),
+        "dit_load_s": re.compile(
+            r"(?i)(?:DiT\s*(?:load|map|weights)|load(?:ing)?\s*DiT)\D{0,40}?(\d+(?:\.\d+)?)\s*s"
+        ),
+        "denoise_s": re.compile(
+            r"(?i)(?:denois(?:e|ing)|diffusion)\D{0,40}?(\d+(?:\.\d+)?)\s*s"
+        ),
+        "vae_s": re.compile(
+            r"(?i)(?:VAE|decoder)\D{0,40}?(\d+(?:\.\d+)?)\s*s"
+        ),
+    }
+    for key, pat in patterns.items():
+        m = pat.search(text)
+        if m:
+            phases[key] = float(m.group(1))
+    # Fallback: "phase_name: 1.23s" style
+    for m in re.finditer(
+        r"(?im)^\s*([A-Za-z][\w\s/-]{1,40}?):\s*(\d+(?:\.\d+)?)\s*s\b", text
+    ):
+        label = re.sub(r"[^a-z0-9]+", "_", m.group(1).strip().lower()).strip("_")
+        if label and label not in phases and len(phases) < 16:
+            phases[f"{label}_s"] = float(m.group(2))
+    return phases
 
 
 def new_job_id(preset: str) -> str:

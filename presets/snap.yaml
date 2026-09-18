@@ -1,4 +1,5 @@
 # snap — Mac Ultra 秒级试片（质量换速度）
+# antirez: at very small step counts keep --reuse 1; layers 40 is aggressive.
 
 id: snap
 width: 512
@@ -7,8 +8,8 @@ frames: 22
 steps: 4
 ssd_streaming: false
 layers: 40
-reuse: 3
+reuse: 1
 render_width: 384
 render_height: 384
 requires_gate: false
-notes: "North-star fast path: small canvas + aggressive reuse/layers. Denoise target: seconds after warm; cold e2e still loads TE/DiT."
+notes: "秒出档: resident DiT, layers40, reuse1 @ 4step (not reuse3). Cold pays TE+load; warm interactive skips them."

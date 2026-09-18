@@ -67,9 +67,9 @@
     <p>引擎能跑 ≠ 产线能连。下面是 h3-opt 的默认约定。</p>
 
     <div class="rule"><strong>1. 先 doctor，再跑。</strong> 绿灯才出片；<span class="dont">不要</span>和 <code>mlx-serve</code> / 另一 <code>./h3</code> 对打——统一内存假死比慢更糟。</div>
-    <div class="rule"><strong>2. 迭代默认 <code>snap</code>。</strong> <span class="do">Do</span>：<code>snap</code> → <code>draw</code> → <code>preview</code> → <code>film_*</code> / <code>deliver</code>。<span class="dont">Don't</span>：一上来 hero / 高 steps（抽卡 7–45 min）。</div>
-    <div class="rule"><strong>3. 拆墙钟。</strong> 用 <code>--profile</code> 看 denoise vs e2e。Ultra：denoise ~5.6s，冷 e2e ~35s；秒出缺口在 <strong>warm 常驻</strong>，不是再写 Metal。</div>
-    <div class="rule"><strong>4. 大内存走常驻。</strong> Ultra / 96GB：snap 优先 <code>--no-ssd-streaming</code>（DiT 驻内存）。</div>
+    <div class="rule"><strong>2. 迭代默认 <code>snap</code> / <code>warm</code>。</strong> <span class="do">Do</span>：<code>h3ctl warm --preset snap</code> 常驻后再抽；或 <code>snap</code> → <code>draw</code> → <code>preview</code> → <code>film_*</code>。<span class="dont">Don't</span>：一上来 hero。</div>
+    <div class="rule"><strong>3. 拆墙钟。</strong> <code>snap*</code> 自动 <code>--profile</code>；看 report 的 <code>denoise_s</code> vs <code>wall_s</code>。冷启动瓶颈是 TE+DiT load。</div>
+    <div class="rule"><strong>4. ≥64GB 默认常驻。</strong> 大内存 <span class="dont">不要</span>开 <code>--ssd-streaming</code>（更慢）。低内存机才默认 SSD。</div>
     <div class="rule"><strong>5. FL2VA ≠ Ref2VA（互斥）。</strong> 锁动作起止 → <code>--first-frame</code> / <code>--last-frame</code>。锁人物身份 → <code>--ref-image</code>（定妆）。<span class="dont">不要混用。</span></div>
     <div class="rule"><strong>6. 接戏用尾帧。</strong> 上一镜结束帧 → 下一镜 <code>--first-frame</code>。每镜独立抽卡 = 换脸、换光、换片场。</div>
     <div class="rule"><strong>7. 三锁写进 ContextDoc。</strong> 身份 / 场景 / 动作可 revise；MP4 只是投影。先 <code>cir</code> validate，再 <code>ops.run</code>。</div>
@@ -77,7 +77,7 @@
     <div class="rule"><strong>9. HD 标签诚实。</strong> <code>native</code> · <code>upscale_*</code> · <code>cloud_2k</code>——不装本地 2K。</div>
     <div class="rule"><strong>10. 工厂调 <code>h3ctl</code>。</strong> 不要散装拼裸 <code>./h3</code>（cwd / shaders / lock 全靠个人记性）。</div>
 
-    <p class="motto">先 <code>doctor</code>，再 <code>snap</code>，过了再爬档；锁人用 Ref，锁态用首尾，接戏用尾帧。</p>
+    <p class="motto">先 <code>doctor</code>，再 <code>warm</code>/<code>snap</code>，过了再爬档；≥64GB 不开 SSD；锁人用 Ref，锁态用首尾，接戏用尾帧。</p>
 
     <h2>Quick start</h2>
     <ul>

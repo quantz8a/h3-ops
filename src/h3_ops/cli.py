@@ -17,7 +17,7 @@ from h3_ops.hd.stitch import stitch as hd_stitch
 from h3_ops.ops.doctor import print_report, run_doctor
 from h3_ops.ops.gate import GateError
 from h3_ops.ops.lock import LockError, acquire_lock, read_lock, release_lock
-from h3_ops.ops.run import RunError, run_job
+from h3_ops.ops.run import RunError, run_job, warm_argv
 from h3_ops.presets import list_presets, load_preset
 
 
@@ -44,11 +44,27 @@ def cmd_presets(_args: argparse.Namespace) -> int:
     cfg = _cfg()
     for name in list_presets(cfg.presets_dir):
         p = load_preset(cfg.presets_dir, name)
+        ssd = "ssd" if p.ssd_streaming else ("res" if p.ssd_streaming is False else "auto")
+        knobs = []
+        if p.layers is not None:
+            knobs.append(f"L{p.layers}")
+        if p.reuse is not None:
+            knobs.append(f"r{p.reuse}")
+        if p.token_reduction:
+            knobs.append("tr")
         print(
-            f"{p.id:12} {p.width}x{p.height} frames={p.frames} steps={p.steps} "
-            f"gate={p.requires_gate} i_know={p.requires_i_know}"
+            f"{p.id:12} {p.width}x{p.height} f={p.frames} s={p.steps} "
+            f"{ssd:4} {' '.join(knobs):12} gate={p.requires_gate}"
         )
     return 0
+
+
+def _ssd_override(args: argparse.Namespace) -> bool | None:
+    if getattr(args, "ssd_streaming", False):
+        return True
+    if getattr(args, "no_ssd_streaming", False):
+        return False
+    return None
 
 
 def cmd_run(args: argparse.Namespace) -> int:
@@ -75,11 +91,44 @@ def cmd_run(args: argparse.Namespace) -> int:
             from_duration=args.from_duration,
             first_frame=Path(args.first_frame) if args.first_frame else None,
             last_frame=Path(args.last_frame) if args.last_frame else None,
-            ssd_streaming=False if args.no_ssd_streaming else None,
+            ssd_streaming=_ssd_override(args),
         )
     except (GateError, RunError, LockError, CirError) as e:
         print(f"error: {e}", file=sys.stderr)
         return 3
+
+
+def cmd_warm(args: argparse.Namespace) -> int:
+    """Start interactive h3 — DiT stays resident; type prompts for second-scale denoise."""
+    import os
+
+    cfg = _cfg()
+    try:
+        preset = load_preset(cfg.presets_dir, args.preset)
+    except FileNotFoundError as e:
+        print(e, file=sys.stderr)
+        return 2
+    if not cfg.h3_bin.is_file():
+        print(f"error: h3 binary missing at {cfg.h3_bin}", file=sys.stderr)
+        return 2
+    try:
+        argv = warm_argv(cfg, preset, ssd_streaming=_ssd_override(args))
+    except RunError as e:
+        print(f"error: {e}", file=sys.stderr)
+        return 3
+    print(
+        f"h3-opt warm · preset={preset.id} · resident DiT session\n"
+        f"cwd={cfg.h3c_src}\n"
+        f"argv={' '.join(argv)}\n"
+        "Type prompts at h3> ; !quit to exit. First prompt still pays load.",
+        file=sys.stderr,
+    )
+    if args.dry_run:
+        return 0
+    os.chdir(cfg.h3c_src)
+    bin_path = str(cfg.h3_bin.resolve())
+    os.execv(bin_path, [bin_path, *argv[1:]])
+    return 0  # pragma: no cover
 
 
 def cmd_lock(args: argparse.Namespace) -> int:
@@ -301,12 +350,29 @@ def build_parser() -> argparse.ArgumentParser:
     r.add_argument("--profile", action="store_true", help="pass --profile to h3")
     r.add_argument("--first-frame", help="FL2VA first-frame conditioning image")
     r.add_argument("--last-frame", help="FL2VA last-frame conditioning image")
-    r.add_argument(
+    ssd = r.add_mutually_exclusive_group()
+    ssd.add_argument(
         "--no-ssd-streaming",
         action="store_true",
-        help="force memory-resident DiT (factory default on M3 Ultra)",
+        help="force memory-resident DiT (default on ≥64GB)",
+    )
+    ssd.add_argument(
+        "--ssd-streaming",
+        action="store_true",
+        help="stream DiT from SSD (low-RAM only; slower on Ultra)",
     )
     r.set_defaults(func=cmd_run)
+
+    w = sub.add_parser(
+        "warm",
+        help="interactive h3 session — keep DiT resident for 秒出 after first load",
+    )
+    w.add_argument("--preset", default="snap", help="knob pack (default: snap)")
+    w.add_argument("--dry-run", action="store_true")
+    ws = w.add_mutually_exclusive_group()
+    ws.add_argument("--no-ssd-streaming", action="store_true")
+    ws.add_argument("--ssd-streaming", action="store_true")
+    w.set_defaults(func=cmd_warm)
 
     lk = sub.add_parser("lock", help="GPU lock status / acquire / release")
     lk.add_argument("action", choices=["status", "acquire", "release"])

@@ -203,7 +203,11 @@ def run_doctor(cfg: Config) -> DoctorReport:
     report.add(
         "ram",
         Level.OK if cfg.ram_gb >= 32 else Level.YELLOW,
-        f"{cfg.ram_gb:.0f} GiB; ssd_streaming_default={cfg.ssd_streaming_default}",
+        (
+            f"{cfg.ram_gb:.0f} GiB; "
+            f"ssd_streaming_default={cfg.ssd_streaming_default} "
+            f"({'low-RAM SSD' if cfg.ssd_streaming_default else 'resident DiT — fast'})"
+        ),
     )
     return report
 

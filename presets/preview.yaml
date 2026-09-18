@@ -5,8 +5,9 @@ width: 480
 height: 832
 frames: 124
 steps: 8
-ssd_streaming: true
-layers: null
-reuse: null
+ssd_streaming: false
+layers: 45
+reuse: 2
+token_reduction: true
 requires_gate: true
-notes: "Default review preset; ~5 min wall on M3 Ultra 96GB"
+notes: "Review preset; resident DiT + token-reduction. Avoid SSD on ≥64GB."

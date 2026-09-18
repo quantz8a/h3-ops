@@ -7,6 +7,6 @@ frames: 22
 steps: 4
 ssd_streaming: false
 layers: 40
-reuse: 3
+reuse: 1
 requires_gate: false
-notes: "Native 256 preview. Use for composition pulls only; expect divergence from deliver."
+notes: "Native 256 preview. Composition pulls only; expect divergence from deliver."

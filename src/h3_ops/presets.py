@@ -11,12 +11,14 @@ class Preset:
     height: int
     frames: int
     steps: int
-    ssd_streaming: bool = True
+    ssd_streaming: bool | None = None  # None → Config.ssd_streaming_default
     layers: int | None = None
     reuse: int | None = None
     render_width: int | None = None
     render_height: int | None = None
     core_reuse: int | None = None
+    token_reduction: bool = False
+    use_int8_row_fc2: bool = False
     requires_gate: bool = False
     requires_i_know: bool = False
     notes: str = ""
@@ -56,18 +58,23 @@ def load_preset_file(path: Path) -> Preset:
     missing = [k for k in ("id", "width", "height", "frames", "steps") if k not in data]
     if missing:
         raise ValueError(f"{path}: missing keys {missing}")
+    ssd = data.get("ssd_streaming", None)
+    if ssd is not None:
+        ssd = bool(ssd)
     return Preset(
         id=str(data["id"]),
         width=int(data["width"]),
         height=int(data["height"]),
         frames=int(data["frames"]),
         steps=int(data["steps"]),
-        ssd_streaming=bool(data.get("ssd_streaming", True)),
+        ssd_streaming=ssd,
         layers=data.get("layers"),
         reuse=data.get("reuse"),
         render_width=data.get("render_width"),
         render_height=data.get("render_height"),
         core_reuse=data.get("core_reuse"),
+        token_reduction=bool(data.get("token_reduction", False)),
+        use_int8_row_fc2=bool(data.get("use_int8_row_fc2", False)),
         requires_gate=bool(data.get("requires_gate", False)),
         requires_i_know=bool(data.get("requires_i_know", False)),
         notes=str(data.get("notes") or ""),

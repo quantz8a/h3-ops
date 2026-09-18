@@ -17,11 +17,13 @@
 | **Goal** | Mac Ultra 上 MiniMax-H3 **秒级出图/试片**（再升到可交付） |
 | **How** | Pin `h3.c` fast knobs (`snap` / warm session), exclusive GPU, zero mlx fight, measure denoise vs e2e |
 | **Not** | CUDA / Comfy 通用栈；不重写 Metal 内核（antirez 管算子，我们管极致路径） |
-| **Today** | M3 Ultra 96GB: `snap` cold e2e **35.2s**（TE 7.8 + DiT load 15.2 + denoise **5.6** + VAE）。Gap → **warm DiT** |
+| **Today** | M3 Ultra 96GB: `snap` cold e2e **~35s**（TE + DiT load + denoise）。**秒出 = `h3ctl warm` 常驻后再抽** |
+| **Speed rules** | ≥64GB **禁止默认 SSD stream**；`snap` 用 layers40·reuse1；`draw`/`preview` 开 token-reduction |
 
 ```bash
 h3ctl doctor          # mlx / rivals must be clear — 性能第一原则
-h3ctl run --preset snap --prompt-file examples/smoke.prompt.txt -o out/snap.mp4 --profile
+h3ctl run --preset snap --prompt-file examples/smoke.prompt.txt -o out/snap.mp4
+h3ctl warm --preset snap   # interactive：首镜仍冷，之后 denoise 秒级
 ```
 
 `h3.c` alone: wrong cwd、无锁、容易一上来就跑 14 分钟 hero。  
@@ -106,20 +108,19 @@ Measured on **M3 Ultra 96GB** unless noted. **秒出 starts at `snap`**, not `de
 
 | preset | canvas | frames | steps | knobs | ~wall | use |
 |:---|:---|:---:|:---:|:---|:---|:---|
-| `snap` | 512² | 22 | 4 | layers40·reuse3·rw384 | **35s cold e2e** / **~5.6s denoise** (Ultra) | 秒级试片目标档 |
-| `snap256` | 256² | 22 | 4 | layers40·reuse3 | fastest composition pull | 构图闪看 |
-| `smoke` | 512² | 22 | 4 | default | ~66s cold e2e | path check |
-| `draw` | 480×832 | 56 | 4–8 | — | ~2–3 min | vertical card |
-| `film_draft` | 832×480 | 56 | 4 | layers45 | ~2 min | 16:9 电影卡 |
-| `film_master` | 1248×704 | 124 | 8 | layers45 | **~22 min** (Ultra measured) | 16:9 成片 |
+| `snap` | 512² | 22 | 4 | layers40·**reuse1**·rw384·**resident** | cold ~35s / denoise ~秒级；**warm 后接近 denoise** | 秒级试片 |
+| `snap256` | 256² | 22 | 4 | layers40·reuse1·resident | fastest composition | 构图闪看 |
+| `smoke` | 512² | 22 | 4 | layers45·reuse1·resident | path check | 冒烟 |
+| `draw` | 480×832 | 56 | 6 | layers45·reuse2·**token-reduction** | ~1–2 min | vertical card |
+| `film_draft` | 832×480 | 56 | 4 | layers45·reuse1·token-reduction | ~1–2 min | 16:9 电影卡 |
+| `film_master` | 1248×704 | 124 | 8 | layers45·resident | **~22 min** | 16:9 成片 |
 | `film_hero` | 1248×704 | 124 | 12 | layers50 | ~25–45 min | 开场/高潮 |
-| `preview` | 480×832 | 124 | 8 | — | ~5 min | ≥5s review |
-| `deliver` | 480×832 | 124 | 20–30 | — | 7–14 min | hero; gate green |
-| `unsafe_hq` | ≥576×1024 | 124 | ≥20 | — | high | jetsam if mlx alive |
+| `preview` | 480×832 | 124 | 8 | layers45·reuse2·token-reduction | ~3–5 min | ≥5s review |
+| `deliver` | 480×832 | 124 | 24 | layers50·reuse1·resident | 7–14 min | hero |
+| `unsafe_hq` | ≥576×1024 | 124 | ≥20 | resident | high | jetsam if mlx alive |
 
-Upstream reference: M5 Max denoise ≈ **3.5s** for 512²·22f·4step ([h3.c](https://github.com/antirez/h3.c)). Ultra cold e2e is dominated by load + text-encoder unless DiT stays resident (interactive / future `h3ctl warm`).
-
-Field failures: wrong cwd (no shaders), `mlx-serve` eating unified memory, free pages → 0 looking like a hang. **秒出 requires `h3ctl doctor` green/yellow without rival `./h3` and preferably without mlx Base fight.**
+Upstream: M5 Max denoise ≈ **3.5s** @ 512²·22f·4step ([h3.c](https://github.com/antirez/h3.c)).  
+**冷启动瓶颈是 TE + DiT load，不是 denoise。** 迭代请用 `h3ctl warm --preset snap`（interactive 常驻），不要每镜新进程 + `--ssd-streaming`。
 
 ## Config
 

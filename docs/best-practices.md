@@ -8,18 +8,18 @@
 
 | Do | Don't |
 |:---|:---|
-| 迭代默认 `snap` / `snap256` | 一上来 `deliver` / `film_hero` |
+| 迭代默认 `snap` / `h3ctl warm` | 一上来 `deliver` / `film_hero` |
 | `h3ctl doctor` 绿灯再跑 | 与 `mlx-serve` / 另一 `./h3` 对打 |
-| Ultra 大内存：`--no-ssd-streaming` | 冷启动反复 load DiT 还当「模型慢」 |
-| `--profile` 拆 denoise vs e2e | 只看总墙钟就换预设 |
+| ≥64GB：**resident DiT**（默认不开 SSD） | 大内存还开 `--ssd-streaming` |
+| 看 report 里 `phases.denoise_s` vs `wall_s` | 只看总墙钟就换预设 |
 
 ```bash
 h3ctl doctor
-h3ctl run --preset snap --prompt-file shot.txt -o out/snap.mp4 --profile --no-ssd-streaming
-# 过了再爬：draw → preview → film_draft → film_master → deliver
+h3ctl run --preset snap --prompt-file shot.txt -o out/snap.mp4
+h3ctl warm --preset snap   # 首镜冷启动，之后同进程秒出 denoise
 ```
 
-**Ultra 锚点（M3 Ultra 96GB）：** `snap` denoise ~**5.6s** · 冷 e2e ~**35s**。秒出缺口在 warm 常驻，不在再写 Metal。
+**Ultra 锚点：** 冷 e2e ~**35s**（TE+load+denoise）；**秒出靠 warm 常驻**，不是再写 Metal。
 
 ---
 
@@ -60,9 +60,10 @@ MP4 是投影；**真相在 ContextDoc**（`cir` validate → revise → 再 `op
 ## 5. 工厂 / 产线硬规则
 
 1. 工厂脚本调 `h3ctl`，不直接拼裸 `./h3`（cwd / shaders / lock）。  
-2. 大 Mac 上 snap/warm 优先 memory-resident DiT（`--no-ssd-streaming`）。  
+2. 大 Mac（≥64GB）默认 **resident DiT**；只有低内存或显式 `--ssd-streaming` 才走 SSD。  
 3. Base DiT 跑时：停 CIR LLM、停 GPU 升清，避免统一内存假死。  
 4. HD 标签诚实：`native` | `upscale_*` | `cloud_2k`，不装本地 2K。
+5. 迭代用 `h3ctl warm`，成片再 `run --preset film_master|deliver`。
 
 ---
 

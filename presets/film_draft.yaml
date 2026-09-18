@@ -7,6 +7,7 @@ frames: 56
 steps: 4
 layers: 45
 reuse: 1
+token_reduction: true
 ssd_streaming: false
 requires_gate: false
-notes: "M3 Ultra commercial draft; ~3–5 min; no SSD stream"
+notes: "M3 Ultra commercial draft; resident + token-reduction."
