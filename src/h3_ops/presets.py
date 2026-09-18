@@ -15,6 +15,7 @@ class Preset:
     layers: int | None = None
     reuse: int | None = None
     render_width: int | None = None
+    render_height: int | None = None
     core_reuse: int | None = None
     requires_gate: bool = False
     requires_i_know: bool = False
@@ -65,6 +66,7 @@ def load_preset_file(path: Path) -> Preset:
         layers=data.get("layers"),
         reuse=data.get("reuse"),
         render_width=data.get("render_width"),
+        render_height=data.get("render_height"),
         core_reuse=data.get("core_reuse"),
         requires_gate=bool(data.get("requires_gate", False)),
         requires_i_know=bool(data.get("requires_i_know", False)),

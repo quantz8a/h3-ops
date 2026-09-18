@@ -66,8 +66,17 @@ def build_argv(
         argv.extend(["--first-frame", str(first_frame.resolve())])
     if last_frame is not None:
         argv.extend(["--last-frame", str(last_frame.resolve())])
-    if preset.render_width is not None:
-        argv.extend(["--render-width", str(int(preset.render_width))])
+    if preset.render_width is not None or preset.render_height is not None:
+        rw = preset.render_width
+        rh = preset.render_height
+        if rw is None and rh is not None:
+            rw = rh
+        if rh is None and rw is not None:
+            # keep output aspect
+            out_w = width if width is not None else preset.width
+            out_h = height if height is not None else preset.height
+            rh = max(64, int(round(rw * out_h / out_w)))
+        argv.extend(["--render-width", str(int(rw)), "--render-height", str(int(rh))])
     if preset.reuse is not None:
         argv.extend(["--reuse", str(int(preset.reuse))])
     if preset.core_reuse is not None:
