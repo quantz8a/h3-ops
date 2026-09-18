@@ -1,0 +1,12 @@
+# film_draft — commercial landscape story cards (16:9)
+
+id: film_draft
+width: 832
+height: 480
+frames: 56
+steps: 4
+layers: 45
+reuse: 1
+ssd_streaming: false
+requires_gate: false
+notes: "M3 Ultra commercial draft; ~3–5 min; no SSD stream"

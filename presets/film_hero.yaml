@@ -1,0 +1,12 @@
+# film_hero — opening / climax / face close-up
+
+id: film_hero
+width: 1248
+height: 704
+frames: 124
+steps: 12
+layers: 50
+reuse: 1
+ssd_streaming: false
+requires_gate: true
+notes: "No turbo-equivalent; face-critical; ~25–45 min on M3 Ultra"

@@ -1,0 +1,12 @@
+# film_master — commercial landscape master (16:9)
+
+id: film_master
+width: 1248
+height: 704
+frames: 124
+steps: 8
+layers: 45
+reuse: 1
+ssd_streaming: false
+requires_gate: true
+notes: "PASS shots; ~12–20 min wall; optional FL2VA first-frame"

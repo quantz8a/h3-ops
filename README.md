@@ -109,7 +109,10 @@ Measured on **M3 Ultra 96GB** unless noted. **秒出 starts at `snap`**, not `de
 | `snap` | 512² | 22 | 4 | layers40·reuse3·rw384 | **35s cold e2e** / **~5.6s denoise** (Ultra) | 秒级试片目标档 |
 | `snap256` | 256² | 22 | 4 | layers40·reuse3 | fastest composition pull | 构图闪看 |
 | `smoke` | 512² | 22 | 4 | default | ~66s cold e2e | path check |
-| `draw` | 480×832 | 56 | 4–8 | — | ~2 min | vertical card |
+| `draw` | 480×832 | 56 | 4–8 | — | ~2–3 min | vertical card |
+| `film_draft` | 832×480 | 56 | 4 | layers45 | ~2 min | 16:9 电影卡 |
+| `film_master` | 1248×704 | 124 | 8 | layers45 | **~22 min** (Ultra measured) | 16:9 成片 |
+| `film_hero` | 1248×704 | 124 | 12 | layers50 | ~25–45 min | 开场/高潮 |
 | `preview` | 480×832 | 124 | 8 | — | ~5 min | ≥5s review |
 | `deliver` | 480×832 | 124 | 20–30 | — | 7–14 min | hero; gate green |
 | `unsafe_hq` | ≥576×1024 | 124 | ≥20 | — | high | jetsam if mlx alive |
@@ -142,7 +145,8 @@ Field failures: wrong cwd (no shaders), `mlx-serve` eating unified memory, free 
 - Landing: https://quantz8a.github.io/h3-ops/
 - Release: https://github.com/quantz8a/h3-ops/releases/tag/v0.1.0
 - Schema: [docs/schemas/context_doc.v1.json](docs/schemas/context_doc.v1.json)
-- Example doc: [examples/leafcut.cir.json](examples/leafcut.cir.json)
+- Example docs: [examples/leafcut.cir.json](examples/leafcut.cir.json) · [examples/xuanhuan_film.prompt.txt](examples/xuanhuan_film.prompt.txt)
+- Demos: [docs/demo/snap.gif](docs/demo/snap.gif) · [docs/demo/xuanhuan_film.gif](docs/demo/xuanhuan_film.gif)
 - Discussions: https://github.com/quantz8a/h3-ops/discussions
 
 ## License

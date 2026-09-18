@@ -1,0 +1,3 @@
+integrated_multimodal_description: [Shot] Chinese fantasy xuanhuan cinema, anamorphic widescreen movie frame, photoreal film look. A lone black-robed swordsman stands on a cliff of mist-wrapped ancient peaks at golden hour; silk sleeves stir in cold wind, long hair tied high. Far below a jade river coils through cloud sea. Suddenly a blade of cyan sword-qi arcs across the sky, splitting fog into volumetric god-rays. Crane shot slowly pushing in, shallow depth of field, subtle film grain, rich teal-and-amber grade, epic wuxia atmosphere, continuous gentle camera drift, no text, no watermark, no modern objects.
+overall_soundscape: distant wind over cliffs, faint temple bell, soft sword hum.
+non_diegetic_music: sparse guqin motif swelling into low cinematic strings.
