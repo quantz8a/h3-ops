@@ -37,7 +37,8 @@ Speed here means **production velocity** (less waste), not **inference throughpu
 4. Spawn `chdir` to h3.c tree (shaders).
 5. Honest HD labels: `native` | `upscale_*` | `cloud_2k`.
 6. No weights in-repo.
-7. Drama / manju-factory stay outside; they call `h3ctl`.
+7. Drama / manju-factory stay outside; they call `h3ctl` (see factory `scripts/h3c_from_shot.py`).
+8. Factory hard rule on large Macs: prefer `--no-ssd-streaming` (memory-resident DiT).
 
 ---
 

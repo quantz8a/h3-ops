@@ -30,6 +30,9 @@ def build_argv(
     height: int | None = None,
     frames: int | None = None,
     extra: list[str] | None = None,
+    first_frame: Path | None = None,
+    last_frame: Path | None = None,
+    ssd_streaming: bool | None = None,
 ) -> list[str]:
     # Always invoke as ./h3 from h3c_src so relative Metal shaders resolve.
     argv = [
@@ -49,9 +52,20 @@ def build_argv(
         "-o",
         str(output.resolve()),
     ]
-    use_ssd = preset.ssd_streaming if preset.ssd_streaming is not None else True
-    if use_ssd or cfg.ssd_streaming_default:
+    if ssd_streaming is None:
+        use_ssd = (
+            preset.ssd_streaming
+            if preset.ssd_streaming is not None
+            else bool(cfg.ssd_streaming_default)
+        )
+    else:
+        use_ssd = bool(ssd_streaming)
+    if use_ssd:
         argv.append("--ssd-streaming")
+    if first_frame is not None:
+        argv.extend(["--first-frame", str(first_frame.resolve())])
+    if last_frame is not None:
+        argv.extend(["--last-frame", str(last_frame.resolve())])
     if preset.reuse is not None:
         argv.extend(["--reuse", str(int(preset.reuse))])
     if preset.layers is not None:
@@ -125,6 +139,9 @@ def run_job(
     dry_run: bool = False,
     profile: bool = False,
     from_duration: bool = False,
+    first_frame: Path | None = None,
+    last_frame: Path | None = None,
+    ssd_streaming: bool | None = None,
 ) -> int:
     prompt, doc_id, doc_seed, width, height, frames, emit_warnings = (
         _resolve_prompt_and_doc(
@@ -172,6 +189,9 @@ def run_job(
         height=height,
         frames=frames,
         extra=["--profile"] if profile else None,
+        first_frame=first_frame,
+        last_frame=last_frame,
+        ssd_streaming=ssd_streaming,
     )
     job_id = new_job_id(preset.id)
     job = start_report(

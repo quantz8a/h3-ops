@@ -57,6 +57,9 @@ Typical loop:
 h3ctl cir compile --brief "剑气削叶" -o shot.cir.json
 h3ctl cir validate shot.cir.json
 h3ctl run --preset preview --doc shot.cir.json -o out/preview.mp4
+# factory / FL2VA:
+# h3ctl run --preset draw --prompt-file shot.txt -o out.mp4 \
+#   --first-frame start.png --no-ssd-streaming
 h3ctl cir revise shot.cir.json --notes "剑气线不可读" -o shot.cir.json
 h3ctl hd deliver --doc shot.cir.json --base out/preview.mp4 \
   --target upscale_1080 -o out/deliver_1080.mp4

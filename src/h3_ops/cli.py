@@ -73,6 +73,9 @@ def cmd_run(args: argparse.Namespace) -> int:
             dry_run=args.dry_run,
             profile=args.profile,
             from_duration=args.from_duration,
+            first_frame=Path(args.first_frame) if args.first_frame else None,
+            last_frame=Path(args.last_frame) if args.last_frame else None,
+            ssd_streaming=False if args.no_ssd_streaming else None,
         )
     except (GateError, RunError, LockError, CirError) as e:
         print(f"error: {e}", file=sys.stderr)
@@ -296,6 +299,13 @@ def build_parser() -> argparse.ArgumentParser:
     r.add_argument("--force", action="store_true", help="override doctor RED")
     r.add_argument("--dry-run", action="store_true")
     r.add_argument("--profile", action="store_true", help="pass --profile to h3")
+    r.add_argument("--first-frame", help="FL2VA first-frame conditioning image")
+    r.add_argument("--last-frame", help="FL2VA last-frame conditioning image")
+    r.add_argument(
+        "--no-ssd-streaming",
+        action="store_true",
+        help="force memory-resident DiT (factory default on M3 Ultra)",
+    )
     r.set_defaults(func=cmd_run)
 
     lk = sub.add_parser("lock", help="GPU lock status / acquire / release")
