@@ -5,17 +5,19 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "h3-ops"
 version = "0.1.0"
-description = "Mac Ultra MiniMax-H3 秒出 companion for antirez/h3.c: snap presets, doctor, ContextDoc, honest HD"
+description = "h3-opt: Apple-first extreme performance for MiniMax-H3 via antirez/h3.c (snap / 秒出)"
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
 keywords = [
+  "h3-opt",
   "minimax-h3",
   "h3.c",
   "apple-silicon",
+  "mac-ultra",
   "video-generation",
+  "performance",
   "mlx",
-  "context-ir",
 ]
 authors = [{ name = "quantz8a" }]
 

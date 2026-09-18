@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>h3-ops — local companion for antirez/h3.c</title>
-  <meta name="description" content="Mac Ultra + MiniMax-H3 秒出 ladder around antirez/h3.c: snap presets, doctor/lock, ContextDoc, honest HD." />
-  <meta property="og:title" content="h3-ops — 秒出 companion for antirez/h3.c" />
-  <meta property="og:description" content="North star: second-scale snaps on Mac Ultra. Orchestrates h3.c fast paths — does not fork Metal." />
+  <title>h3-opt — 苹果平台极致性能 · MiniMax-H3</title>
+  <meta name="description" content="h3-opt：苹果平台极致性能。Mac Ultra + MiniMax-H3 秒出 ladder around antirez/h3.c — snap, warm, doctor, honest HD." />
+  <meta property="og:title" content="h3-opt — 苹果平台极致性能" />
+  <meta property="og:description" content="Apple-first extreme performance for local MiniMax-H3 via h3.c. 秒出 snap → deliver." />
   <meta property="og:image" content="https://quantz8a.github.io/h3-ops/assets/social-preview.png" />
   <style>
     :root { color-scheme: dark; --bg:#0f1419; --fg:#e8eef7; --muted:#9aa4b2; --line:#3d4f66; --accent:#f1b467; }
@@ -28,18 +28,18 @@
 </head>
 <body>
   <main>
-    <div class="tag">quantz8a / h3-ops</div>
-    <h1>Mac Ultra · MiniMax-H3 · 秒出</h1>
+    <div class="tag">h3-opt · quantz8a/h3-ops</div>
+    <h1>苹果平台极致性能</h1>
     <p>
-      North star: <strong>second-scale snaps</strong> on Apple Silicon via
-      <code>h3ctl run --preset snap</code>, then climb to deliver. Same
-      <code>h3.c</code> binary — we pin the fast path and kill cold-start waste.
+      <strong>h3-opt</strong> — Mac Ultra / Apple Silicon 上把 MiniMax-H3 拧到
+      <strong>秒级试片</strong>（<code>snap</code>），再爬升到 deliver。
+      同一套 <code>h3.c</code>；我们主打极致快路径与常驻，不 fork Metal。
     </p>
     <p>
-      Also: ContextDoc CIR, GPU lock / doctor, honest HD labels. No Metal fork.
+      Also: ContextDoc CIR · GPU lock / doctor · honest HD.
     </p>
-    <img class="demo" src="https://raw.githubusercontent.com/quantz8a/h3-ops/main/docs/demo/smoke.gif" width="360" height="360" alt="h3-ops smoke preset demo" />
-    <p class="cap">smoke preset · ~1s · 512² · <code>h3ctl run</code></p>
+    <img class="demo" src="https://raw.githubusercontent.com/quantz8a/h3-ops/main/docs/demo/snap.gif" width="320" height="320" alt="h3-opt snap demo" />
+    <p class="cap">Ultra · <code>snap</code> · denoise ~5.6s · <code>h3ctl run --preset snap</code></p>
     <img class="hero" src="assets/hero-flow.svg" alt="Flow: ContextDoc to Base to honest HD" />
     <ul>
       <li><code>cir</code> — compile / validate / revise / emit ContextDoc</li>

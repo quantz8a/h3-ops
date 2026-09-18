@@ -1,5 +1,6 @@
-# h3-ops — DESIGN
+# h3-opt — DESIGN
 
+**Brand:** **h3-opt** — 苹果平台极致性能（repo/CLI still `h3-ops` / `h3ctl`).  
 **North star:** Mac Ultra + MiniMax-H3 **秒出** (snap / warm), then climb to deliver.  
 **Status:** Phase 0–4 MVP shipped (ops + cir + hd). Phase 5 = cloud adapters + warm session.  
 **Engines:** [antirez/h3.c](https://github.com/antirez/h3.c) (Base); optional MiniMax API (cloud CIR / Regenerate-2K).
@@ -17,16 +18,17 @@ This file is the architecture SoT. Keep [README.md](README.md) short.
 3. **Ops pain** — wrong cwd (missing `h3_shaders.metal`), `mlx-serve` vs DiT memory fight, jetsam, “hung” jobs that are swapping.
 4. **No honest HD** — Regenerate-2K closed; Base ~480–768 class; delivery still needs a labeled ladder.
 
-`h3-ops` is a **thin companion**, not a Metal fork: it makes the **秒出 ladder** (`snap` → `draw` → `preview` → `deliver`) and residency rules the product.
+**h3-opt** is Apple-first performance productization of `h3.c`: the **秒出 ladder** (`snap` → `draw` → `preview` → `deliver`) and residency rules — not a Metal fork.
 
 ### Value proposition
 
 | Claim | True? |
 |:---|:---|
-| Mac Ultra can approach **秒级试片** | **Yes, as a product goal** — pin `snap` / warm DiT; measure denoise vs e2e |
-| We rewrite Metal for free speedups | **No** — antirez/`h3.c` owns kernels |
-| Companion alone turns every deliver into 1s | **No** — hero quality stays expensive; 秒出 is the iteration tier |
-| Drama factory gets faster | **Yes** once it calls `h3ctl` (`scripts/h3c_from_shot.py`) with `PRESET=snap` first |
+| Brand = **苹果平台极致性能** | **Yes** — Ultra / Apple Silicon only; no CUDA story |
+| Mac Ultra can approach **秒级试片** | **Yes, product goal** — pin `snap` / warm DiT; publish walls |
+| We rewrite Metal for free speedups | **No** — antirez/`h3.c` owns kernels; we own the extreme path |
+| Every deliver becomes 1s | **No** — hero stays expensive; 秒出 is the iteration tier |
+| Drama factory gets faster | **Yes** once it calls `h3ctl` with `PRESET=snap` first |
 
 ---
 

@@ -1,8 +1,10 @@
-# h3-ops
+# h3-opt
 
-**North star:** on **Mac Ultra + MiniMax-H3**, make local pulls feel like **秒出** — via [antirez/h3.c](https://github.com/antirez/h3.c) fast paths, warm residency, and an ops ladder. No Metal fork.
+**主打：苹果平台极致性能** — Mac Ultra / Apple Silicon 上把 [MiniMax-H3](https://github.com/MiniMax-AI/MiniMax-H3) + [antirez/h3.c](https://github.com/antirez/h3.c) 拧到 **秒级试片**，再按需爬升到可交付。不 fork Metal。
 
-[![Apple Silicon](https://img.shields.io/badge/Apple%20Silicon-arm64-black)](https://github.com/antirez/h3.c)
+> 仓库名 `h3-ops` · CLI `h3ctl` · 产品名 **h3-opt**（optimize for Apple）。
+
+[![Apple Silicon](https://img.shields.io/badge/Apple%20Silicon-极致性能-black)](https://github.com/antirez/h3.c)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Release](https://img.shields.io/github/v/release/quantz8a/h3-ops?label=release)](https://github.com/quantz8a/h3-ops/releases/tag/v0.1.0)
 [![Site](https://img.shields.io/badge/site-quantz8a.github.io-0f1419)](https://quantz8a.github.io/h3-ops/)
@@ -11,26 +13,26 @@
 
 | | |
 |:---|:---|
+| **Brand** | **h3-opt** — Apple-first extreme performance for local H3 |
 | **Goal** | Mac Ultra 上 MiniMax-H3 **秒级出图/试片**（再升到可交付） |
-| **How** | Pin the `h3.c` fast knobs (`snap` / warm session), kill wasted cold starts (doctor / GPU lock / no mlx fight), only then spend minutes on `preview`/`deliver` |
-| **Not** | Replacing Metal kernels inside `h3.c`. We orchestrate the second-scale path; antirez owns the denoise math |
-| **Today** | M3 Ultra 96GB measured: `snap` cold e2e **35.2s** (TE 7.8 + DiT load 15.2 + denoise **5.6** + VAE). Cold `smoke` ≈ **66s**. Gap to 秒出 ≈ **warm DiT residency** (interactive / `h3ctl warm`) |
-
+| **How** | Pin `h3.c` fast knobs (`snap` / warm session), exclusive GPU, zero mlx fight, measure denoise vs e2e |
+| **Not** | CUDA / Comfy 通用栈；不重写 Metal 内核（antirez 管算子，我们管极致路径） |
+| **Today** | M3 Ultra 96GB: `snap` cold e2e **35.2s**（TE 7.8 + DiT load 15.2 + denoise **5.6** + VAE）。Gap → **warm DiT** |
 
 ```bash
-h3ctl doctor          # mlx / rivals must be clear
+h3ctl doctor          # mlx / rivals must be clear — 性能第一原则
 h3ctl run --preset snap --prompt-file examples/smoke.prompt.txt -o out/snap.mp4 --profile
 ```
 
-`h3.c` alone: wrong cwd (no shaders), no revise/lock loop, easy to accidentally run 14‑min hero shots while iterating.  
-`h3-ops` makes the **秒出 ladder** the default path — without forking Metal / DiT.
+`h3.c` alone: wrong cwd、无锁、容易一上来就跑 14 分钟 hero。  
+**h3-opt** 把苹果上的 **极致快路径**做成默认产品（`snap` → `draw` → `preview` → `deliver`）。
 
 
 <p align="center">
-  <img src="docs/demo/smoke.gif" alt="h3-ops smoke preset (~1s, 512²) via h3ctl run" width="360" />
+  <img src="docs/demo/snap.gif" alt="h3-opt snap on Mac Ultra" width="320" />
 </p>
 
-<p align="center"><sub>smoke preset · ~1s · 512² · <code>h3ctl run</code> on Apple Silicon</sub></p>
+<p align="center"><sub>h3-opt · <code>snap</code> · Ultra measured denoise ~5.6s · <code>h3ctl run --preset snap</code></sub></p>
 
 [![flow](docs/assets/hero-flow.svg)](https://quantz8a.github.io/h3-ops/)
 
@@ -104,7 +106,7 @@ Measured on **M3 Ultra 96GB** unless noted. **秒出 starts at `snap`**, not `de
 
 | preset | canvas | frames | steps | knobs | ~wall | use |
 |:---|:---|:---:|:---:|:---|:---|:---|
-| `snap` | 512² | 22 | 4 | layers40·reuse3·rw384 | **target: seconds denoise (warm)**; cold e2e TBD | 秒级试片 |
+| `snap` | 512² | 22 | 4 | layers40·reuse3·rw384 | **35s cold e2e** / **~5.6s denoise** (Ultra) | 秒级试片目标档 |
 | `snap256` | 256² | 22 | 4 | layers40·reuse3 | fastest composition pull | 构图闪看 |
 | `smoke` | 512² | 22 | 4 | default | ~66s cold e2e | path check |
 | `draw` | 480×832 | 56 | 4–8 | — | ~2 min | vertical card |

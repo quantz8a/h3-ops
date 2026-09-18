@@ -1,11 +1,12 @@
-# Outreach copy (paste-ready)
+# Outreach copy (paste-ready) — h3-opt
 
-Short posts to put `h3-ops` in front of people who already care about `h3.c` / MiniMax-H3 on Mac. Do **not** spam antirez issues; prefer Banodoco / X / Discord / friends who actually run Apple Silicon.
+Brand: **h3-opt** · 苹果平台极致性能  
+Repo/CLI still: `quantz8a/h3-ops` / `h3ctl`
 
 Links:
 - Repo: https://github.com/quantz8a/h3-ops
 - Site: https://quantz8a.github.io/h3-ops/
-- GIF: https://github.com/quantz8a/h3-ops/blob/main/docs/demo/smoke.gif
+- GIF: https://github.com/quantz8a/h3-ops/blob/main/docs/demo/snap.gif
 - Release: https://github.com/quantz8a/h3-ops/releases/tag/v0.1.0
 
 ---
@@ -13,9 +14,10 @@ Links:
 ## X / Twitter (EN)
 
 ```text
-h3-ops = production velocity around antirez/h3.c — not faster DiT.
+h3-opt: Apple-first extreme performance for MiniMax-H3
 
-Same Metal binary. Fewer wasted runs: doctor/lock, ContextDoc revise, preset ladder, honest HD labels.
+Mac Ultra · antirez/h3.c · snap presets → second-scale denoise, then climb to deliver.
+No Metal fork — we pin the fast path.
 
 https://github.com/quantz8a/h3-ops
 ```
@@ -23,9 +25,10 @@ https://github.com/quantz8a/h3-ops
 ## X / 微博 / 小红书短帖 (ZH)
 
 ```text
-h3-ops 提的是产线速度，不是 DiT 算力。
+h3-opt · 苹果平台极致性能
 
-还是同一个 h3：少废片、少撞 mlx、preset 阶梯抽卡、ContextDoc 改戏再跑、升清不装 2K。
+Mac Ultra 上 MiniMax-H3：snap 秒级试片 → 再爬 preview/deliver
+不 fork Metal，把 h3.c 快路径做成默认产品。
 
 https://github.com/quantz8a/h3-ops
 ```
@@ -33,27 +36,18 @@ https://github.com/quantz8a/h3-ops
 ## Banodoco / Discord (EN)
 
 ```text
-For folks running MiniMax-H3 via antirez/h3.c on Mac:
+**h3-opt** (repo: quantz8a/h3-ops) — Apple Silicon extreme performance layer on antirez/h3.c:
 
-**h3-ops** is a small CLI companion (not a Comfy node). It does **not** make denoise faster — it speeds *production velocity*:
-• `h3ctl doctor` — shaders / FL2VA / mlx rivalry / free-pages
-• CIR ContextDoc compile/validate/revise
-• presets + GPU lock around `h3`
-• honest HD ladder (labels stay `upscale_*`, not Regenerate-2K)
+• `snap` / `snap256` — second-scale iteration tier (Ultra measured ~5.6s denoise)
+• `h3ctl doctor` + GPU lock — no mlx fight
+• ContextDoc CIR + honest HD ladder
 
-MIT. Needs a built h3.c + weights.
+Not a Comfy node. MIT. Needs built h3.c + weights.
 https://github.com/quantz8a/h3-ops
 ```
 
-## Soft reply under antirez's X post (only if relevant)
+## Soft reply under antirez's X post
 
 ```text
-If you're wiring h3.c into a daily loop: I published a thin companion CLI for doctor/CIR/honest HD (no Metal fork) → https://github.com/quantz8a/h3-ops
-```
-
-## Friends DM (ZH)
-
-```text
-你要是本机在跑 h3.c，帮忙看一眼这个 companion 仓库行不行：https://github.com/quantz8a/h3-ops
-主要是 doctor + ContextDoc + 诚实升清。有用的话 star 一下就够了，目标先冲 10。
+Building h3-opt on top of h3.c for Mac Ultra extreme performance (snap → deliver). https://github.com/quantz8a/h3-ops
 ```
