@@ -370,6 +370,7 @@ Optional CIR + Regenerate-2K.
 ## 13. References
 
 - [Why h3-opt（必要性）](docs/why-h3-opt.md)
+- [Best practices](docs/best-practices.md) · [site](https://quantz8a.github.io/h3-ops/#best-practices)
 - antirez/h3.c README (cwd, streaming, limits; FL2VA / Ref2VA)
 - MiniMax-H3 / FL2VA layout
 - Factory field runs: jiangye h3c-compare (smoke → dazhao s30)
