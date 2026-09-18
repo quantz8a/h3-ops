@@ -18,7 +18,7 @@
     .tag { color: var(--accent); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.85rem; }
     p { color: var(--muted); line-height: 1.55; }
     .hero { width: 100%; height: auto; margin: 28px 0; border: 1px solid var(--line); border-radius: 8px; }
-    .demo { display: block; width: min(360px, 100%); height: auto; margin: 20px 0 8px; border: 1px solid var(--line); border-radius: 8px; background: #000; }
+    .demo { display: block; width: 100%; max-width: 640px; height: auto; margin: 20px 0 8px; border: 1px solid var(--line); border-radius: 8px; background: #000; aspect-ratio: 16 / 9; object-fit: cover; }
     .cap { margin: 0 0 24px; font-size: 0.85rem; color: var(--muted); }
     ul { color: var(--muted); line-height: 1.6; padding-left: 1.2rem; }
     a { color: var(--accent); }
@@ -54,8 +54,8 @@
       <a href="https://github.com/quantz8a/h3-ops/blob/main/docs/why-h3-opt.md">Why h3-opt</a>
       <a href="https://github.com/quantz8a/h3-ops/blob/main/docs/best-practices.md">完整版</a>
     </p>
-    <img class="demo" src="https://raw.githubusercontent.com/quantz8a/h3-ops/main/docs/demo/snap.gif" width="320" height="320" alt="h3-opt snap demo" />
-    <p class="cap">Ultra · <code>snap</code> · denoise ~5.6s · <code>h3ctl run --preset snap</code></p>
+    <img class="demo" src="https://raw.githubusercontent.com/quantz8a/h3-ops/main/docs/demo/xuanhuan_film.gif" width="640" height="361" alt="h3-opt 武侠电影帧 · film_master" />
+    <p class="cap">Ultra · 武侠横幅 · <code>film_master</code> 1248×704 · <code>h3ctl run --preset film_master</code></p>
     <img class="hero" src="assets/hero-flow.svg" alt="Flow: ContextDoc to Base to honest HD" />
 
     <h2 id="best-practices">最佳实践</h2>

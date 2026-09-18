@@ -6,7 +6,7 @@ Repo/CLI still: `quantz8a/h3-ops` / `h3ctl`
 Links:
 - Repo: https://github.com/quantz8a/h3-ops
 - Site: https://quantz8a.github.io/h3-ops/
-- GIF: https://github.com/quantz8a/h3-ops/blob/main/docs/demo/snap.gif
+- GIF: https://github.com/quantz8a/h3-ops/blob/main/docs/demo/xuanhuan_film.gif
 - Release: https://github.com/quantz8a/h3-ops/releases/tag/v0.1.0
 
 ---

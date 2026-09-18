@@ -29,10 +29,10 @@ h3ctl run --preset snap --prompt-file examples/smoke.prompt.txt -o out/snap.mp4 
 
 
 <p align="center">
-  <img src="docs/demo/snap.gif" alt="h3-opt snap on Mac Ultra" width="320" />
+  <img src="docs/demo/xuanhuan_film.gif" alt="h3-opt wuxia film_master on Mac Ultra" width="640" />
 </p>
 
-<p align="center"><sub>h3-opt · <code>snap</code> · Ultra measured denoise ~5.6s · <code>h3ctl run --preset snap</code></sub></p>
+<p align="center"><sub>h3-opt · 武侠横幅 · <code>film_master</code> 1248×704 · Ultra · <code>h3ctl run --preset film_master</code></sub></p>
 
 [![flow](docs/assets/hero-flow.svg)](https://quantz8a.github.io/h3-ops/)
 
