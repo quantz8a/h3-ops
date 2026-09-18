@@ -272,7 +272,7 @@ def cmd_hd_stitch(args: argparse.Namespace) -> int:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    p = argparse.ArgumentParser(prog="h3ctl", description="h3-ops companion CLI")
+    p = argparse.ArgumentParser(prog="h3ctl", description="h3-opt — Apple extreme performance CLI")
     p.add_argument("--version", action="version", version=f"h3-ops {__version__}")
     sub = p.add_subparsers(dest="cmd", required=True)
 
