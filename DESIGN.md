@@ -11,14 +11,17 @@ This file is the architecture SoT. Keep [README.md](README.md) short.
 
 ## 1. Problem
 
-`h3.c` alone leaves four gaps for a manju / Ultra workflow:
+`h3.c` alone leaves five gaps for a manju / Ultra workflow:
 
 1. **Seconds are possible but not the default** — users burn 5–14 min hero presets while iterating; cold e2e hides a few-second denoise behind TE/load.
 2. **No Context-IR** — cloud module is API-only; bare prompts break lock / revise loops.
 3. **Ops pain** — wrong cwd (missing `h3_shaders.metal`), `mlx-serve` vs DiT memory fight, jetsam, “hung” jobs that are swapping.
 4. **No honest HD** — Regenerate-2K closed; Base ~480–768 class; delivery still needs a labeled ladder.
+5. **No continuity product** — FL2VA / Ref2VA flags exist in-engine, but shot handoff (tail→start, looksheet→`--ref-image`) is not a default pipeline → 网剧镜间割裂.
 
-**h3-opt** is Apple-first performance productization of `h3.c`: the **秒出 ladder** (`snap` → `draw` → `preview` → `deliver`) and residency rules — not a Metal fork.
+**h3-opt** is Apple-first performance productization of `h3.c`: the **秒出 ladder** (`snap` → `draw` → `preview` → `deliver`), residency rules, and continuity contracts — not a Metal fork.
+
+对外 Necessity reference:** [docs/why-h3-opt.md](docs/why-h3-opt.md)
 
 ### Value proposition
 
@@ -366,6 +369,7 @@ Optional CIR + Regenerate-2K.
 
 ## 13. References
 
-- antirez/h3.c README (cwd, streaming, limits)
+- [Why h3-opt（必要性）](docs/why-h3-opt.md)
+- antirez/h3.c README (cwd, streaming, limits; FL2VA / Ref2VA)
 - MiniMax-H3 / FL2VA layout
 - Factory field runs: jiangye h3c-compare (smoke → dazhao s30)

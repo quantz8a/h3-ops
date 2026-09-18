@@ -25,12 +25,12 @@ https://github.com/quantz8a/h3-ops
 ## X / 微博 / 小红书短帖 (ZH)
 
 ```text
-h3-opt · 苹果平台极致性能
+为什么不能只 star h3.c？
 
-Mac Ultra 上 MiniMax-H3：snap 秒级试片 → 再爬 preview/deliver
-不 fork Metal，把 h3.c 快路径做成默认产品。
+裸跑：假死、14 分钟抽卡、镜间换脸换光。
+h3-opt：苹果极致性能层 — snap 秒试、doctor 拒对打、电影档、连续性契约。
 
-https://github.com/quantz8a/h3-ops
+参考：https://github.com/quantz8a/h3-ops/blob/main/docs/why-h3-opt.md
 ```
 
 ## Banodoco / Discord (EN)

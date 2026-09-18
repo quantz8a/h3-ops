@@ -141,6 +141,7 @@ Field failures: wrong cwd (no shaders), `mlx-serve` eating unified memory, free 
 
 ## Docs
 
+- **Why h3-opt（必要性参考）:** [docs/why-h3-opt.md](docs/why-h3-opt.md)
 - Design SoT: [DESIGN.md](DESIGN.md)
 - Landing: https://quantz8a.github.io/h3-ops/
 - Release: https://github.com/quantz8a/h3-ops/releases/tag/v0.1.0
