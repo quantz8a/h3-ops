@@ -19,6 +19,10 @@ from h3_ops.ops.run import RunError, run_job
 from h3_ops.presets import Preset
 
 
+def has_ref2va(cfg: Config) -> bool:
+    return (cfg.model_dir / "Ref2VA").is_dir()
+
+
 @dataclass
 class PlannedShot:
     id: str
@@ -144,9 +148,17 @@ def run_chain(
     if looksheet is not None and not looksheet.is_file() and not dry_run:
         raise RunError(f"looksheet not found: {looksheet}")
 
+    use_ref2va = has_ref2va(cfg)
+    if not use_ref2va and any(s.mode == "lock" for s in shots):
+        print(
+            "note: Ref2VA weights missing — lock shots fall back to "
+            "FL2VA --first-frame=looksheet (install Ref2VA for true identity lock)",
+            flush=True,
+        )
+
     print(
         f"chain preset={preset.id} shots={len(shots)} "
-        f"looksheet={looksheet or 'none'}",
+        f"looksheet={looksheet or 'none'} ref2va={use_ref2va}",
         flush=True,
     )
     outputs: list[Path] = []
@@ -164,8 +176,15 @@ def run_chain(
                     ref = (manifest_path.parent / ref).resolve()
             if ref is None:
                 raise RunError(f"shot {shot.id}: lock without ref")
-            refs = [ref]
-            print(f"[{shot.id}] lock --ref-image {ref.name}", flush=True)
+            if use_ref2va:
+                refs = [ref]
+                print(f"[{shot.id}] lock --ref-image {ref.name}", flush=True)
+            else:
+                first = ref
+                print(
+                    f"[{shot.id}] lock-fallback --first-frame {ref.name}",
+                    flush=True,
+                )
         elif shot.mode == "handoff":
             prev = shots[i - 1].output
             tail = out_dir / "_handoff" / f"{shots[i - 1].id}_tail.png"

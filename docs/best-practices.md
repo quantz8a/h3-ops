@@ -69,4 +69,8 @@ MP4 是投影；**真相在 ContextDoc**（`cir` validate → revise → 再 `op
 
 ## 6. 一句话
 
-> **先 `doctor`，再 `snap`，过了再爬档；锁人用 Ref，锁态用首尾，接戏用尾帧。**
+> **先 `doctor`，再 `warm`/`snap`，过了再爬档；开场锁脸 Ref，接戏用尾帧；成片再 `film_master`。**
+
+```bash
+h3ctl chain --manifest examples/wuxia_chain.json --preset film_draft -o out/wuxia_chain
+```
