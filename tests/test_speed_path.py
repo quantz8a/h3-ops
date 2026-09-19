@@ -67,6 +67,45 @@ def test_warm_argv_interactive() -> None:
     assert "--ssd-streaming" not in argv
 
 
+def test_ref_exclusive_with_first_frame() -> None:
+    from h3_ops.ops.run import RunError, build_argv
+
+    root = Path(__file__).resolve().parents[1]
+    cfg = Config.from_env(root)
+    preset = load_preset(cfg.presets_dir, "snap")
+    look = root / "examples" / "wuxia_look.png"
+    try:
+        build_argv(
+            cfg,
+            preset,
+            prompt="x",
+            output=root / "out" / "t.mp4",
+            seed=1,
+            first_frame=look,
+            ref_images=[look],
+        )
+    except RunError as e:
+        assert "mutually exclusive" in str(e)
+    else:
+        raise AssertionError("expected exclusive error")
+
+
+def test_chain_plan_lock_then_handoff() -> None:
+    import json
+    import tempfile
+
+    from h3_ops.ops.chain import plan_shots
+
+    root = Path(__file__).resolve().parents[1]
+    manifest = json.loads((root / "examples" / "wuxia_chain.json").read_text())
+    with tempfile.TemporaryDirectory() as td:
+        look, shots = plan_shots(
+            manifest, out_dir=Path(td), manifest_dir=root / "examples"
+        )
+    assert look is not None and look.name == "wuxia_look.png"
+    assert [s.mode for s in shots] == ["lock", "handoff"]
+
+
 def test_parse_profile_log() -> None:
     text = "text encoder 7.8s\nDiT load 15.2s\ndenoise 5.6s\nVAE decode 2.1s\n"
     phases = parse_profile_log(text)
@@ -80,5 +119,7 @@ if __name__ == "__main__":
     test_draw_token_reduction()
     test_resolve_ssd_cli_override()
     test_warm_argv_interactive()
+    test_ref_exclusive_with_first_frame()
+    test_chain_plan_lock_then_handoff()
     test_parse_profile_log()
     print("ok")

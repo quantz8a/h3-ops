@@ -46,6 +46,7 @@ def build_argv(
     extra: list[str] | None = None,
     first_frame: Path | None = None,
     last_frame: Path | None = None,
+    ref_images: list[Path] | None = None,
     ssd_streaming: bool | None = None,
     interactive: bool = False,
 ) -> list[str]:
@@ -70,10 +71,20 @@ def build_argv(
     use_ssd = resolve_ssd_streaming(cfg, preset, ssd_streaming=ssd_streaming)
     if use_ssd:
         argv.append("--ssd-streaming")
+    refs = [Path(p) for p in (ref_images or [])]
+    if refs and (first_frame is not None or last_frame is not None):
+        raise RunError(
+            "Ref2VA (--ref-image) and FL2VA (--first-frame/--last-frame) "
+            "are mutually exclusive in h3.c"
+        )
     if first_frame is not None:
         argv.extend(["--first-frame", str(first_frame.resolve())])
     if last_frame is not None:
         argv.extend(["--last-frame", str(last_frame.resolve())])
+    for ref in refs:
+        if not ref.is_file():
+            raise RunError(f"ref image not found: {ref}")
+        argv.extend(["--ref-image", str(ref.resolve())])
     if preset.render_width is not None or preset.render_height is not None:
         rw = preset.render_width
         rh = preset.render_height
@@ -174,6 +185,7 @@ def run_job(
     from_duration: bool = False,
     first_frame: Path | None = None,
     last_frame: Path | None = None,
+    ref_images: list[Path] | None = None,
     ssd_streaming: bool | None = None,
 ) -> int:
     prompt, doc_id, doc_seed, width, height, frames, emit_warnings = (
@@ -235,6 +247,7 @@ def run_job(
         extra=["--profile"] if want_profile else None,
         first_frame=first_frame,
         last_frame=last_frame,
+        ref_images=ref_images,
         ssd_streaming=ssd_streaming,
     )
     job_id = new_job_id(preset.id)

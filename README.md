@@ -24,6 +24,7 @@
 h3ctl doctor          # mlx / rivals must be clear — 性能第一原则
 h3ctl run --preset snap --prompt-file examples/smoke.prompt.txt -o out/snap.mp4
 h3ctl warm --preset snap   # interactive：首镜仍冷，之后 denoise 秒级
+h3ctl chain --manifest examples/wuxia_chain.json --preset film_draft -o out/wuxia_chain
 ```
 
 `h3.c` alone: wrong cwd、无锁、容易一上来就跑 14 分钟 hero。  

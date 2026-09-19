@@ -91,6 +91,7 @@ def cmd_run(args: argparse.Namespace) -> int:
             from_duration=args.from_duration,
             first_frame=Path(args.first_frame) if args.first_frame else None,
             last_frame=Path(args.last_frame) if args.last_frame else None,
+            ref_images=[Path(p) for p in (args.ref_image or [])] or None,
             ssd_streaming=_ssd_override(args),
         )
     except (GateError, RunError, LockError, CirError) as e:
@@ -129,6 +130,31 @@ def cmd_warm(args: argparse.Namespace) -> int:
     bin_path = str(cfg.h3_bin.resolve())
     os.execv(bin_path, [bin_path, *argv[1:]])
     return 0  # pragma: no cover
+
+
+def cmd_chain(args: argparse.Namespace) -> int:
+    from h3_ops.ops.chain import run_chain
+
+    cfg = _cfg()
+    try:
+        preset = load_preset(cfg.presets_dir, args.preset)
+    except FileNotFoundError as e:
+        print(e, file=sys.stderr)
+        return 2
+    try:
+        return run_chain(
+            cfg,
+            preset,
+            manifest_path=Path(args.manifest),
+            out_dir=Path(args.output),
+            dry_run=args.dry_run,
+            force=args.force,
+            i_know=args.i_know,
+            stitch=not args.no_stitch,
+        )
+    except (GateError, RunError, LockError, CirError, HdError) as e:
+        print(f"error: {e}", file=sys.stderr)
+        return 3
 
 
 def cmd_lock(args: argparse.Namespace) -> int:
@@ -350,6 +376,12 @@ def build_parser() -> argparse.ArgumentParser:
     r.add_argument("--profile", action="store_true", help="pass --profile to h3")
     r.add_argument("--first-frame", help="FL2VA first-frame conditioning image")
     r.add_argument("--last-frame", help="FL2VA last-frame conditioning image")
+    r.add_argument(
+        "--ref-image",
+        action="append",
+        default=[],
+        help="Ref2VA identity image (repeatable; exclusive with first/last)",
+    )
     ssd = r.add_mutually_exclusive_group()
     ssd.add_argument(
         "--no-ssd-streaming",
@@ -373,6 +405,19 @@ def build_parser() -> argparse.ArgumentParser:
     ws.add_argument("--no-ssd-streaming", action="store_true")
     ws.add_argument("--ssd-streaming", action="store_true")
     w.set_defaults(func=cmd_warm)
+
+    ch = sub.add_parser(
+        "chain",
+        help="episode chain: looksheet lock, then tail→next first-frame",
+    )
+    ch.add_argument("--manifest", required=True, help="JSON shots + optional looksheet")
+    ch.add_argument("--preset", default="snap")
+    ch.add_argument("-o", "--output", required=True, help="directory for shot mp4s")
+    ch.add_argument("--dry-run", action="store_true")
+    ch.add_argument("--force", action="store_true")
+    ch.add_argument("--i-know", action="store_true")
+    ch.add_argument("--no-stitch", action="store_true", help="do not concat into chain.mp4")
+    ch.set_defaults(func=cmd_chain)
 
     lk = sub.add_parser("lock", help="GPU lock status / acquire / release")
     lk.add_argument("action", choices=["status", "acquire", "release"])

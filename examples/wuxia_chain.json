@@ -1,0 +1,14 @@
+{
+  "looksheet": "wuxia_look.jpg",
+  "seed": 7,
+  "shots": [
+    {
+      "id": "01_lock",
+      "prompt": "Chinese fantasy wuxia cinema, 16:9, photoreal. The SAME black-robed swordsman from the reference stands on a mist cliff at golden hour, silk sleeves in cold wind, hair tied high. Jade river in the cloud sea below. Slow push-in, teal-and-amber grade, no text, no watermark."
+    },
+    {
+      "id": "02_handoff",
+      "prompt": "Continuous same cliff, same golden hour, the SAME black-robed swordsman. He turns and a cyan sword-qi arc splits the fog into god-rays. Crane continues the previous shot, no identity change, no text, no watermark."
+    }
+  ]
+}
