@@ -1,0 +1,12 @@
+# film_hero_clean — landscape hero with more denoise steps (anti-alias / less sparkle)
+
+id: film_hero_clean
+width: 1248
+height: 704
+frames: 124
+steps: 20
+layers: 50
+reuse: 1
+ssd_streaming: false
+requires_gate: true
+notes: "Same canvas as film_hero; steps20 for cleaner edges; ~60–90 min Ultra"
