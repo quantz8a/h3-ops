@@ -17,6 +17,7 @@ from h3_ops.hd.stitch import stitch as hd_stitch
 from h3_ops.ops.doctor import print_report, run_doctor
 from h3_ops.ops.gate import GateError
 from h3_ops.ops.lock import LockError, acquire_lock, read_lock, release_lock
+from h3_ops.ops.make import make_video
 from h3_ops.ops.run import RunError, run_job, warm_argv
 from h3_ops.presets import list_presets, load_preset
 
@@ -93,6 +94,29 @@ def cmd_run(args: argparse.Namespace) -> int:
             last_frame=Path(args.last_frame) if args.last_frame else None,
             ref_images=[Path(p) for p in (args.ref_image or [])] or None,
             ssd_streaming=_ssd_override(args),
+        )
+    except (GateError, RunError, LockError, CirError) as e:
+        print(f"error: {e}", file=sys.stderr)
+        return 3
+
+
+def cmd_make(args: argparse.Namespace) -> int:
+    """Pixelle-style one-click: topic → local h3.c mp4."""
+    cfg = _cfg()
+    topic = (args.topic or "").strip() or None
+    try:
+        return make_video(
+            cfg,
+            topic=topic,
+            prompt_file=Path(args.prompt_file) if args.prompt_file else None,
+            quality=args.quality,
+            output=Path(args.output) if args.output else None,
+            seed=args.seed,
+            force=args.force,
+            dry_run=args.dry_run,
+            profile=not args.no_profile,
+            open_result=args.open,
+            landscape=not args.vertical,
         )
     except (GateError, RunError, LockError, CirError) as e:
         print(f"error: {e}", file=sys.stderr)
@@ -394,6 +418,35 @@ def build_parser() -> argparse.ArgumentParser:
         help="stream DiT from SSD (low-RAM only; slower on Ultra)",
     )
     r.set_defaults(func=cmd_run)
+
+    mk = sub.add_parser(
+        "make",
+        help="one-click: topic/script → h3.c mp4 (Pixelle-style UX, local Apple)",
+    )
+    mk.add_argument(
+        "topic",
+        nargs="?",
+        default=None,
+        help='plain topic or script, e.g. "哥特教堂女战士光刃斩异形"',
+    )
+    mk.add_argument("--prompt-file", help="existing h3 prompt file (instead of topic)")
+    mk.add_argument(
+        "--quality",
+        default="hq",
+        help="hq|turbo|snap|draft|motion|master|hero|clean (default hq=film_turbo ≥10× master)",
+    )
+    mk.add_argument("-o", "--output", help="default: out/make_<slug>_<preset>_<ts>.mp4")
+    mk.add_argument("--seed", type=int, default=None)
+    mk.add_argument("--force", action="store_true")
+    mk.add_argument("--dry-run", action="store_true")
+    mk.add_argument("--no-profile", action="store_true")
+    mk.add_argument("--open", action="store_true", help="open mp4 when done (macOS)")
+    mk.add_argument(
+        "--vertical",
+        action="store_true",
+        help="9:16 framing in auto-wrapped prompt (default 16:9)",
+    )
+    mk.set_defaults(func=cmd_make)
 
     w = sub.add_parser(
         "warm",

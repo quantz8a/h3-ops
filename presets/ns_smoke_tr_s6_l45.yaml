@@ -1,0 +1,11 @@
+id: ns_smoke_tr_s6_l45
+width: 864
+height: 480
+frames: 56
+steps: 6
+layers: 45
+reuse: 1
+token_reduction: true
+ssd_streaming: false
+requires_gate: false
+notes: "Combo aiming ~2× FLOP cut vs hq_smoke; eye-check quality."

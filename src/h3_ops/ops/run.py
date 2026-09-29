@@ -11,6 +11,7 @@ from h3_ops.cir.validate import require_valid
 from h3_ops.config import Config
 from h3_ops.ops.gate import GateError, gate
 from h3_ops.ops.lock import LockError, acquire_lock, release_lock
+from h3_ops.ops.mlx_coord import MlxExclusiveHold, acquire_mlx_exclusive
 from h3_ops.ops.report import argv_hash, new_job_id, parse_profile_log, start_report
 from h3_ops.presets import Preset
 
@@ -283,6 +284,15 @@ def run_job(
     except LockError as e:
         raise RunError(str(e)) from e
 
+    mlx_hold: MlxExclusiveHold | None = None
+    try:
+        mlx_hold = acquire_mlx_exclusive(
+            holder=f"h3ctl-run:{preset.id}:{output.name}",
+        )
+    except Exception as e:
+        release_lock(cfg.lock_path)
+        raise RunError(f"mlx exclusive lock failed: {e}") from e
+
     import time
     from datetime import datetime, timezone
 
@@ -303,6 +313,8 @@ def run_job(
             )
             rc = proc.wait()
     finally:
+        if mlx_hold is not None:
+            mlx_hold.release()
         release_lock(cfg.lock_path)
 
     t1 = time.time()

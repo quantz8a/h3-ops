@@ -1,0 +1,13 @@
+# film_draft_alive — 832×480 全镜慢动（稳身份、少拖影）
+
+id: film_draft_alive
+width: 832
+height: 480
+frames: 97
+steps: 8
+layers: 45
+reuse: 1
+token_reduction: true
+ssd_streaming: false
+requires_gate: false
+notes: "Gentle idle motion; crisp edges; no smear. For math-thinking-rap board-led shots."

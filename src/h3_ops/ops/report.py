@@ -44,6 +44,37 @@ class JobReport:
 def parse_profile_log(text: str) -> dict[str, float]:
     """Extract coarse phase seconds from h3 --profile log lines."""
     phases: dict[str, float] = {}
+    # Prefer structured "h3 profile: … wall= Xs encode= Ys wait= Zs"
+    for m in re.finditer(
+        r"h3 profile:\s+H3 DiT\s+Euler denoise\s+wall=\s*([0-9.]+)s"
+        r"\s+encode=\s*([0-9.]+)s\s+wait=\s*([0-9.]+)s",
+        text,
+    ):
+        phases["denoise_s"] = float(m.group(1))
+        phases["denoise_encode_s"] = float(m.group(2))
+        phases["denoise_wait_s"] = float(m.group(3))
+    for m in re.finditer(
+        r"h3 profile:\s+H3 DiT\s+load\s+wall=\s*([0-9.]+)s",
+        text,
+    ):
+        phases["dit_load_s"] = float(m.group(1))
+    for m in re.finditer(
+        r"h3 profile:\s+Qwen text encoder\s+total\s+wall=\s*([0-9.]+)s",
+        text,
+    ):
+        phases["text_encoder_s"] = float(m.group(1))
+    for m in re.finditer(
+        r"h3 profile:\s+video VAE decoder\s+total\s+wall=\s*([0-9.]+)s",
+        text,
+    ):
+        phases["vae_s"] = float(m.group(1))
+    for m in re.finditer(
+        r"h3 profile:\s+DiT\s+(qkv|sdpa|attn_out|mlp)\s+wall=\s*([0-9.]+)s",
+        text,
+        re.I,
+    ):
+        phases[f"dit_{m.group(1).lower()}_s"] = float(m.group(2))
+
     # Match common labels: "text encoder", "DiT load", "denoise", "VAE", etc.
     patterns = {
         "text_encoder_s": re.compile(
@@ -60,6 +91,8 @@ def parse_profile_log(text: str) -> dict[str, float]:
         ),
     }
     for key, pat in patterns.items():
+        if key in phases:
+            continue
         m = pat.search(text)
         if m:
             phases[key] = float(m.group(1))
@@ -68,7 +101,7 @@ def parse_profile_log(text: str) -> dict[str, float]:
         r"(?im)^\s*([A-Za-z][\w\s/-]{1,40}?):\s*(\d+(?:\.\d+)?)\s*s\b", text
     ):
         label = re.sub(r"[^a-z0-9]+", "_", m.group(1).strip().lower()).strip("_")
-        if label and label not in phases and len(phases) < 16:
+        if label and f"{label}_s" not in phases and len(phases) < 24:
             phases[f"{label}_s"] = float(m.group(2))
     return phases
 

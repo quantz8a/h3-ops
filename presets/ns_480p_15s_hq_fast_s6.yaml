@@ -1,0 +1,12 @@
+# Same knobs as ns_480p_15s_hq_fast (alias for clarity).
+id: ns_480p_15s_hq_fast_s6
+width: 864
+height: 480
+frames: 362
+steps: 6
+layers: 50
+reuse: 2
+token_reduction: false
+ssd_streaming: false
+requires_gate: false
+notes: "Alias of hq_fast after S6 accepted."

@@ -1,0 +1,15 @@
+# ns_480p_15s_hq — north-star QUALITY path (no render-down)
+# 864×480 · 362f (~15.08s) · layers50 · reuse1 · steps8
+# Success gate: warm e2e ≤60s without quality knobs (token_reduction / layers<45 / reuse≥3).
+
+id: ns_480p_15s_hq
+width: 864
+height: 480
+frames: 362
+steps: 8
+layers: 50
+reuse: 1
+token_reduction: false
+ssd_streaming: false
+requires_gate: false
+notes: "Quality north-star. Native canvas only. Prefer warm session; measure denoise encode/wait."

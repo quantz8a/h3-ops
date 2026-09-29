@@ -34,6 +34,38 @@ def test_snap_argv_no_ssd_reuse1() -> None:
     assert "--token-reduction" not in argv
 
 
+def test_film_turbo_argv_10x_path() -> None:
+    root = Path(__file__).resolve().parents[1]
+    cfg = Config.from_env(root)
+    preset = load_preset(cfg.presets_dir, "film_turbo")
+    argv = build_argv(
+        cfg,
+        preset,
+        prompt="duel",
+        output=root / "out" / "turbo.mp4",
+        seed=1,
+    )
+    assert argv[argv.index("--width") + 1] == "1248"
+    assert argv[argv.index("--height") + 1] == "704"
+    assert argv[argv.index("--render-width") + 1] == "832"
+    assert argv[argv.index("--render-height") + 1] == "480"
+    assert argv[argv.index("--frames") + 1] == "56"
+    assert argv[argv.index("--steps") + 1] == "4"
+    assert argv[argv.index("--layers") + 1] == "40"
+    assert "--token-reduction" in argv
+    assert "--use-int8-row-fc2" in argv
+    assert "--ssd-streaming" not in argv
+
+
+def test_quality_hq_maps_turbo() -> None:
+    root = Path(__file__).resolve().parents[1]
+    cfg = Config.from_env(root)
+    from h3_ops.ops.make import resolve_quality_preset
+
+    assert resolve_quality_preset(cfg, "hq").id == "film_turbo"
+    assert resolve_quality_preset(cfg, "turbo").id == "film_turbo"
+
+
 def test_draw_token_reduction() -> None:
     root = Path(__file__).resolve().parents[1]
     cfg = Config.from_env(root)
@@ -102,7 +134,7 @@ def test_chain_plan_lock_then_handoff() -> None:
         look, shots = plan_shots(
             manifest, out_dir=Path(td), manifest_dir=root / "examples"
         )
-    assert look is not None and look.name == "wuxia_look.png"
+    assert look is not None and look.name.startswith("wuxia_look.")
     assert [s.mode for s in shots] == ["lock", "handoff"]
 
 
@@ -116,6 +148,8 @@ def test_parse_profile_log() -> None:
 if __name__ == "__main__":
     test_ultra_defaults_resident()
     test_snap_argv_no_ssd_reuse1()
+    test_film_turbo_argv_10x_path()
+    test_quality_hq_maps_turbo()
     test_draw_token_reduction()
     test_resolve_ssd_cli_override()
     test_warm_argv_interactive()

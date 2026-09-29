@@ -1,0 +1,11 @@
+id: ns_smoke_r2_tr_s6
+width: 864
+height: 480
+frames: 56
+steps: 6
+layers: 50
+reuse: 2
+token_reduction: true
+ssd_streaming: false
+requires_gate: false
+notes: "r2 + TR + S6 combo smoke."

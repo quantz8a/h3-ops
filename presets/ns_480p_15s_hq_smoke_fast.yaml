@@ -1,0 +1,11 @@
+id: ns_480p_15s_hq_smoke_fast
+width: 864
+height: 480
+frames: 56
+steps: 6
+layers: 50
+reuse: 2
+token_reduction: false
+ssd_streaming: false
+requires_gate: false
+notes: "Smoke twin of hq_fast (r2+S6)."

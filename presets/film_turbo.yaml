@@ -1,0 +1,20 @@
+# film_turbo — HQ canvas at ~10× film_master wall (efficiency product)
+
+# Baseline film_master: 1248×704 · f124 · s8 · L45 · native denoise → ~20–40 min
+# Budget (approx linear): steps×0.5 × render_px×0.45 × frames×0.45 ≈ 0.10 → ~10×
+# Delivery size stays 1248×704; DiT runs at 832×480 then h3 upscales.
+
+id: film_turbo
+width: 1248
+height: 704
+render_width: 832
+render_height: 480
+frames: 56
+steps: 4
+layers: 40
+reuse: 1
+token_reduction: true
+use_int8_row_fc2: true
+ssd_streaming: false
+requires_gate: true
+notes: "Efficiency north star: ≥10× vs film_master wall; warm session for multi-shot. Not a substitute for film_hero face close-ups."

@@ -1,0 +1,12 @@
+# ns_480p_15s_hq_smoke — short native geometry for A/B (same knobs as hq, 56f)
+id: ns_480p_15s_hq_smoke
+width: 864
+height: 480
+frames: 56
+steps: 8
+layers: 50
+reuse: 1
+token_reduction: false
+ssd_streaming: false
+requires_gate: false
+notes: "Smoke bench for quality-preserving A/B before 362f."

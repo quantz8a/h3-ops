@@ -1,0 +1,16 @@
+# ns_480p_15s — QUALITY-BROKEN compute probe only (rw288). Do NOT use for delivery.
+# Prefer presets/ns_480p_15s_hq.yaml for the quality north-star.
+
+id: ns_480p_15s
+width: 864
+height: 480
+frames: 362
+steps: 4
+layers: 40
+reuse: 1
+token_reduction: true
+ssd_streaming: false
+render_width: 288
+render_height: 160
+requires_gate: false
+notes: "DEPRECATED probe: extreme render-down. Use ns_480p_15s_hq for quality path."

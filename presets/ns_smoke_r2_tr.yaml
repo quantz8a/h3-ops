@@ -1,0 +1,12 @@
+# Stack on accepted reuse=2: + token reduction (antirez-validated with L45 r2; here L50).
+id: ns_smoke_r2_tr
+width: 864
+height: 480
+frames: 56
+steps: 8
+layers: 50
+reuse: 2
+token_reduction: true
+ssd_streaming: false
+requires_gate: false
+notes: "r2 + TR smoke; eye-check after speed win."

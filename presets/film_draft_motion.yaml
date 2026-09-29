@@ -1,0 +1,13 @@
+# film_draft_motion — 832×480 教学动效（比 film_draft 更长、稍多步）
+
+id: film_draft_motion
+width: 832
+height: 480
+frames: 97
+steps: 6
+layers: 45
+reuse: 1
+token_reduction: true
+ssd_streaming: false
+requires_gate: false
+notes: "S2E01 board-led motion pass; 480p; ~4s clip; no SSD streaming."

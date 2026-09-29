@@ -1,0 +1,12 @@
+# core-reuse path (mutually exclusive with --reuse).
+id: ns_smoke_cr4
+width: 864
+height: 480
+frames: 56
+steps: 8
+layers: 50
+core_reuse: 4
+token_reduction: false
+ssd_streaming: false
+requires_gate: false
+notes: "core-reuse=4 vs velocity reuse."

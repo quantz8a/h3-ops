@@ -1,0 +1,12 @@
+# Smoke FLOP A/B: same geometry as ns_480p_15s_hq_smoke, knobs only.
+id: ns_smoke_tr
+width: 864
+height: 480
+frames: 56
+steps: 8
+layers: 50
+reuse: 1
+token_reduction: true
+ssd_streaming: false
+requires_gate: false
+notes: "Token reduction on; quality A/B vs hq_smoke."

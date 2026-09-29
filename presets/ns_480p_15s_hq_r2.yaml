@@ -1,0 +1,15 @@
+# ns_480p_15s_hq_r2 — accepted mild-quality delivery (eye-checked 2026-09-29)
+# Same native canvas as hq; reuse=2 only. Smoke denoise ~1.6× vs reuse1 baseline.
+# Gold lock remains ns_480p_15s_hq (reuse1). Do not claim the ≤60s gate on this preset.
+
+id: ns_480p_15s_hq_r2
+width: 864
+height: 480
+frames: 362
+steps: 8
+layers: 50
+reuse: 2
+token_reduction: false
+ssd_streaming: false
+requires_gate: false
+notes: "Eye-OK vs hq baseline (flop_r2). Prefer for faster native 15s; use hq when locking gold."

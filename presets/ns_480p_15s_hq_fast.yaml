@@ -1,0 +1,14 @@
+# ns_480p_15s_hq_fast — mild quality for 科教 (eye-checked 2026-09-29)
+# reuse=2 + steps=6. TR rejected (ghosting). Gold: ns_480p_15s_hq (r1 S8).
+
+id: ns_480p_15s_hq_fast
+width: 864
+height: 480
+frames: 362
+steps: 6
+layers: 50
+reuse: 2
+token_reduction: false
+ssd_streaming: false
+requires_gate: false
+notes: "Accepted: r2+S6 (~2× denoise on smoke). No TR."

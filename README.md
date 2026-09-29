@@ -14,21 +14,40 @@
 | | |
 |:---|:---|
 | **Brand** | **h3-opt** — Apple-first extreme performance for local H3 |
-| **Goal** | Mac Ultra 上 MiniMax-H3 **秒级出图/试片**（再升到可交付） |
-| **How** | Pin `h3.c` fast knobs (`snap` / warm session), exclusive GPU, zero mlx fight, measure denoise vs e2e |
-| **Not** | CUDA / Comfy 通用栈；不重写 Metal 内核（antirez 管算子，我们管极致路径） |
-| **Today** | M3 Ultra 96GB: `snap` cold e2e **~35s**（TE + DiT load + denoise）。**秒出 = `h3ctl warm` 常驻后再抽** |
-| **Speed rules** | ≥64GB **禁止默认 SSD stream**；`snap` 用 layers40·reuse1；`draw`/`preview` 开 token-reduction |
+| **Goal** | **高质量视频产出效率 ≥10×**（相对冷启动 `film_master` 墙钟） |
+| **How** | `film_turbo`（成片画幅 + 低内渲染 + 少步）+ `warm` 常驻 + GPU 独占 |
+| **Not** | CUDA / Comfy 通用栈；不重写 Metal；不是 Pixelle 口播长链路 |
+| **Today** | `film_master` ~23–41 min；`film_turbo` 目标 **~2–4 min** 同画幅交付 — 见 [docs/efficiency.md](docs/efficiency.md) |
+| **Speed rules** | ≥64GB **禁止默认 SSD stream**；秒出用 `snap`/`warm`；成片效率默认 `make --quality hq` |
 
 ```bash
-h3ctl doctor          # mlx / rivals must be clear — 性能第一原则
-h3ctl run --preset snap --prompt-file examples/smoke.prompt.txt -o out/snap.mp4
-h3ctl warm --preset snap   # interactive：首镜仍冷，之后 denoise 秒级
+h3ctl doctor
+# 效率成片（默认 hq → film_turbo，相对 master ~10×）
+h3ctl make "哥特教堂女战士光刃斩异形" --open
+h3ctl run --preset film_turbo --prompt-file examples/smoke.prompt.txt -o out/turbo.mp4 --profile
+h3ctl warm --preset film_turbo   # 多镜：首镜冷，之后接近 denoise
 h3ctl chain --manifest examples/wuxia_chain.json --preset film_draft -o out/wuxia_chain
 ```
 
-`h3.c` alone: wrong cwd、无锁、容易一上来就跑 14 分钟 hero。  
-**h3-opt** 把苹果上的 **极致快路径**做成默认产品（`snap` → `draw` → `preview` → `deliver`）。
+`h3.c` alone: wrong cwd、无锁、容易一上来就跑 14–40 分钟 hero。  
+**h3-opt** 默认走 **效率成片**（`film_turbo`），需要封顶质量再爬 `film_master` / `film_hero`。
+
+### One-click (`h3ctl make`)
+
+参考 [Pixelle-Video](https://github.com/ATH-MaaS/Pixelle-Video) 的「输入主题 → 成片」体验；媒体引擎固定本地 **h3.c**。产品定位是 **HQ 效率**，不是口播工厂。
+
+| | Pixelle-Video | h3-opt `make` |
+|:---|:---|:---|
+| 输入 | 主题 / 固定脚本 | 主题、剧本、或 `--prompt-file` |
+| 引擎 | Comfy / API / TTS / BGM | **仅 antirez/h3.c** |
+| 默认质量 | 模板 | **`hq` → `film_turbo`（≥10× vs master）** |
+| 封顶 | — | `master` / `hero` / `clean` |
+
+```bash
+h3ctl make "三线城市夜空功夫大战异形" --open          # default hq
+h3ctl make "…" --quality master -o out/master.mp4   # 质量封顶
+open scripts/h3-make.command
+```
 
 
 <p align="center">
@@ -114,7 +133,8 @@ Measured on **M3 Ultra 96GB** unless noted. **秒出 starts at `snap`**, not `de
 | `smoke` | 512² | 22 | 4 | layers45·reuse1·resident | path check | 冒烟 |
 | `draw` | 480×832 | 56 | 6 | layers45·reuse2·**token-reduction** | ~1–2 min | vertical card |
 | `film_draft` | 832×480 | 56 | 4 | layers45·reuse1·token-reduction | ~1–2 min | 16:9 电影卡 |
-| `film_master` | 1248×704 | 124 | 8 | layers45·resident | **~22 min** | 16:9 成片 |
+| **`film_turbo`** | **1248×704** (render 832×480) | 56 | 4 | L40·TR·int8·resident | **目标 ~2–4 min（≥10× vs master）** | **效率成片默认** |
+| `film_master` | 1248×704 | 124 | 8 | layers45·resident | **~22–40 min** | 16:9 质量封顶 |
 | `film_hero` | 1248×704 | 124 | 12 | layers50 | ~25–45 min | 开场/高潮 |
 | `preview` | 480×832 | 124 | 8 | layers45·reuse2·token-reduction | ~3–5 min | ≥5s review |
 | `deliver` | 480×832 | 124 | 24 | layers50·reuse1·resident | 7–14 min | hero |
@@ -139,9 +159,12 @@ Upstream: M5 Max denoise ≈ **3.5s** @ 512²·22f·4step ([h3.c](https://github
 - Forking / reimplementing Metal DiT or redistributing weights  
 - Vendor drama / looksheet business  
 - Label local upscale as Regenerate-2K  
-- Claiming deliver-quality 5s clips in one second — **秒出 is the snap ladder; hero stays slow on purpose**
+- Claiming deliver-quality 5s clips in one second — **秒出 is snap; HQ efficiency is film_turbo (~10× master); hero stays slow on purpose**
 
 ## Docs
+
+- [efficiency.md](docs/efficiency.md) — **≥10× HQ path** (`film_turbo` vs `film_master`)
+- [DESIGN.md](DESIGN.md) — architecture SoT
 
 - **Why h3-opt（必要性参考）:** [docs/why-h3-opt.md](docs/why-h3-opt.md)
 - **Best practices:** [docs/best-practices.md](docs/best-practices.md) · [site §最佳实践](https://quantz8a.github.io/h3-ops/#best-practices)

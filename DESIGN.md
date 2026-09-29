@@ -1,8 +1,8 @@
 # h3-opt — DESIGN
 
 **Brand:** **h3-opt** — 苹果平台极致性能（repo/CLI still `h3-ops` / `h3ctl`).  
-**North star:** Mac Ultra + MiniMax-H3 **秒出** (snap / warm), then climb to deliver.  
-**Status:** Phase 0–4 MVP shipped (ops + cir + hd). Phase 5 partial: **`h3ctl warm`** + resident-by-default on ≥64GB; cloud adapters still open.
+**North star:** **高质量视频产出效率 ≥10×** vs cold `film_master`（见 [docs/efficiency.md](docs/efficiency.md)）；秒出仍用 `snap`/`warm`。  
+**Status:** Phase 0–4 MVP shipped (ops + cir + hd). Phase 5: **`film_turbo`**, **`h3ctl make`**, **`h3ctl warm`**, mlx exclusive; cloud adapters still open.
 **Engines:** [antirez/h3.c](https://github.com/antirez/h3.c) (Base); optional MiniMax API (cloud CIR / Regenerate-2K).
 
 This file is the architecture SoT. Keep [README.md](README.md) short.
@@ -47,6 +47,8 @@ This file is the architecture SoT. Keep [README.md](README.md) short.
 8. Factory hard rule on large Macs: **never** default `--ssd-streaming` when RAM ≥ 64GB (memory-resident DiT). SSD stream only on low-RAM or explicit `--ssd-streaming`.
 9. **秒出 before deliver** — default iteration is `snap` / `h3ctl warm`; never open with `deliver`.
 10. Small step counts keep `--reuse 1` (antirez); do not pair `token-reduction` with `layers40`+`reuse3`.
+11. **One-click stays local** — `h3ctl make` mirrors Pixelle topic→video UX; backend is only `h3.c`.
+12. **Efficiency before hero** — default delivery path is `film_turbo` (≥10× vs `film_master` wall); climb to master/hero only when QC fails.
 
 ---
 

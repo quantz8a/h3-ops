@@ -1,0 +1,11 @@
+id: ns_smoke_s4
+width: 864
+height: 480
+frames: 56
+steps: 4
+layers: 50
+reuse: 1
+token_reduction: false
+ssd_streaming: false
+requires_gate: false
+notes: "Steps 4 quality/speed probe."
