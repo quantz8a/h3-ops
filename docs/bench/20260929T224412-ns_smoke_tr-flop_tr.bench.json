@@ -1,0 +1,41 @@
+{
+  "label": "flop_tr",
+  "preset": "ns_smoke_tr",
+  "stamp": "20260929T224412",
+  "wall_s": 150.744,
+  "phases": {
+    "dit_load_s": 17.967,
+    "text_encoder_s": 9.435,
+    "vae_s": 20.894,
+    "denoise_s": 99.319
+  },
+  "profile_detail": {
+    "qwen_text_encoder_total": {
+      "wall_s": 9.435,
+      "encode_s": 0.128,
+      "wait_s": 1.795
+    },
+    "h3_dit_load": {
+      "wall_s": 17.967,
+      "encode_s": 0.026,
+      "wait_s": 0.854
+    },
+    "h3_dit_total": {
+      "wall_s": 119.068,
+      "encode_s": 71.388,
+      "wait_s": 28.767
+    },
+    "audio_vae_decoder_total": {
+      "wall_s": 0.466,
+      "encode_s": 0.262,
+      "wait_s": 0.08
+    },
+    "video_vae_decoder_total": {
+      "wall_s": 20.894,
+      "encode_s": 0.133,
+      "wait_s": 18.489
+    }
+  },
+  "output_mp4": "/Users/zzz858aaa/h3-ops/out/bench/20260929T224412-ns_smoke_tr-flop_tr.mp4",
+  "log": "/Users/zzz858aaa/h3-ops/out/bench/20260929T224412-ns_smoke_tr-flop_tr.mp4.log"
+}

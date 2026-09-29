@@ -164,6 +164,7 @@ Upstream: M5 Max denoise ≈ **3.5s** @ 512²·22f·4step ([h3.c](https://github
 ## Docs
 
 - [efficiency.md](docs/efficiency.md) — **≥10× HQ path** (`film_turbo` vs `film_master`)
+- [bench/ns-480p-perf-compare.md](docs/bench/ns-480p-perf-compare.md) — native 864×480 engine A/B + FLOP eye-check
 - [DESIGN.md](DESIGN.md) — architecture SoT
 
 - **Why h3-opt（必要性参考）:** [docs/why-h3-opt.md](docs/why-h3-opt.md)

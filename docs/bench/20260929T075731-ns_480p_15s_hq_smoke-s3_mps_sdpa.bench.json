@@ -1,0 +1,48 @@
+{
+  "label": "s3_mps_sdpa",
+  "preset": "ns_480p_15s_hq_smoke",
+  "stamp": "20260929T075731",
+  "wall_s": 205.391,
+  "phases": {
+    "dit_load_s": 15.503,
+    "text_encoder_s": 8.653,
+    "vae_s": 22.088,
+    "denoise_s": 157.238
+  },
+  "profile_detail": {
+    "qwen_text_encoder_total": {
+      "wall_s": 8.653,
+      "encode_s": 0.102,
+      "wait_s": 1.745
+    },
+    "h3_dit_load": {
+      "wall_s": 15.503,
+      "encode_s": 0.021,
+      "wait_s": 0.815
+    },
+    "h3_dit_total": {
+      "wall_s": 173.253,
+      "encode_s": 128.849,
+      "wait_s": 28.509
+    },
+    "audio_vae_decoder_total": {
+      "wall_s": 0.614,
+      "encode_s": 0.319,
+      "wait_s": 0.078
+    },
+    "video_vae_decoder_total": {
+      "wall_s": 22.088,
+      "encode_s": 0.163,
+      "wait_s": 18.557
+    }
+  },
+  "env": {
+    "H3_GPU_SAMPLER": null,
+    "H3_CPU_SAMPLER": null,
+    "H3_DIT_COMMAND_BLOCKS": null,
+    "H3_NAX": "0",
+    "H3_SDPA_MAX_QUERY_ROWS": null
+  },
+  "output_mp4": "/Users/zzz858aaa/h3-ops/out/bench/20260929T075731-ns_480p_15s_hq_smoke-s3_mps_sdpa.mp4",
+  "log": "/Users/zzz858aaa/h3-ops/out/bench/20260929T075731-ns_480p_15s_hq_smoke-s3_mps_sdpa.mp4.log"
+}

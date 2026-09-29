@@ -1,0 +1,44 @@
+{
+  "job_id": "20260929T234855-ns_480p_15s_hq_smoke_fast_s6-a6db26",
+  "doc_id": null,
+  "preset": "ns_480p_15s_hq_smoke_fast_s6",
+  "argv": [
+    "./h3",
+    "-d",
+    "/Users/zzz858aaa/llm-lab/src/minimax-h3-mlx-rebuild/official",
+    "-p",
+    "<prompt 210 chars>",
+    "-o",
+    "/Users/zzz858aaa/h3-ops/out/bench/20260929T234854-ns_480p_15s_hq_smoke_fast_s6-eye.mp4",
+    "--width",
+    "864",
+    "--height",
+    "480",
+    "--frames",
+    "56",
+    "--steps",
+    "6",
+    "--reuse",
+    "2",
+    "--layers",
+    "50",
+    "--profile"
+  ],
+  "cwd": "/Users/zzz858aaa/llm-lab/src/h3.c",
+  "started_at": "2026-09-29T23:48:55+08:00",
+  "ended_at": "2026-09-29T23:50:56+08:00",
+  "exit_code": 0,
+  "wall_s": 121.444,
+  "output_mp4": "/Users/zzz858aaa/h3-ops/out/bench/20260929T234854-ns_480p_15s_hq_smoke_fast_s6-eye.mp4",
+  "log_path": "/Users/zzz858aaa/h3-ops/out/bench/20260929T234854-ns_480p_15s_hq_smoke_fast_s6-eye.mp4.log",
+  "warnings": [
+    "mlx_ports: listeners on [11234, 11236] — mlx-serve procs: 51963 2179552 /opt/homebrew/bin/mlx-serve serve --host 127.0.0.1 --port 11236 --ctx-size 65536 --timeout 0 --max-resident-mem 32GB --max-resident-models 1 --max-concurrent 1 --idle-evict-secs 300 --skip-mem-preflight — stop before heavy Base jobs",
+    "ssd_streaming=OFF (memory-resident DiT — fast path)"
+  ],
+  "phases": {
+    "dit_load_s": 13.318,
+    "text_encoder_s": 8.345,
+    "vae_s": 20.526,
+    "denoise_s": 77.639
+  }
+}

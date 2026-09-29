@@ -59,6 +59,8 @@ h3ctl warm --preset film_turbo
 
 ## Native 864×480 FLOP curve (M3 Ultra, smoke 56f)
 
+Full A/B + eye table + raw JSON: **[docs/bench/ns-480p-perf-compare.md](bench/ns-480p-perf-compare.md)**.
+
 BF16 GEMM is already ~19 TFLOPS-capped; further wins are **less DiT work**. Eye-check 2026-09-29:
 
 | preset / knobs | denoise | vs reuse1 baseline | eye |

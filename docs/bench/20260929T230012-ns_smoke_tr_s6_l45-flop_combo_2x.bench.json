@@ -1,0 +1,41 @@
+{
+  "label": "flop_combo_2x",
+  "preset": "ns_smoke_tr_s6_l45",
+  "stamp": "20260929T230012",
+  "wall_s": 121.619,
+  "phases": {
+    "dit_load_s": 18.561,
+    "text_encoder_s": 9.956,
+    "vae_s": 21.047,
+    "denoise_s": 68.965
+  },
+  "profile_detail": {
+    "qwen_text_encoder_total": {
+      "wall_s": 9.956,
+      "encode_s": 0.078,
+      "wait_s": 1.833
+    },
+    "h3_dit_load": {
+      "wall_s": 18.561,
+      "encode_s": 0.039,
+      "wait_s": 0.787
+    },
+    "h3_dit_total": {
+      "wall_s": 89.428,
+      "encode_s": 48.546,
+      "wait_s": 21.227
+    },
+    "audio_vae_decoder_total": {
+      "wall_s": 0.379,
+      "encode_s": 0.179,
+      "wait_s": 0.081
+    },
+    "video_vae_decoder_total": {
+      "wall_s": 21.047,
+      "encode_s": 0.123,
+      "wait_s": 18.933
+    }
+  },
+  "output_mp4": "/Users/zzz858aaa/h3-ops/out/bench/20260929T230012-ns_smoke_tr_s6_l45-flop_combo_2x.mp4",
+  "log": "/Users/zzz858aaa/h3-ops/out/bench/20260929T230012-ns_smoke_tr_s6_l45-flop_combo_2x.mp4.log"
+}
